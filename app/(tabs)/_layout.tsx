@@ -15,7 +15,7 @@ export default function TabLayout() {
           href: null,
           title: 'Home',
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href="/webSignin" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
