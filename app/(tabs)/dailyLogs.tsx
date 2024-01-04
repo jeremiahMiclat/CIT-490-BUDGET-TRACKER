@@ -1,15 +1,12 @@
 import { StyleSheet } from 'react-native';
 
+import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
 
-import React from 'react';
-import { Button } from 'react-native';
-import auth from '@react-native-firebase/auth';
-
-export default function HomeScreen() {
+export default function DailyLogsScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home Screen</Text>
+      <Text style={styles.title}>Daily Logs Screen</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
