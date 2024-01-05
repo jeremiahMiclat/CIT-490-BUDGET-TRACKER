@@ -1,5 +1,14 @@
 import { initializeApp } from 'firebase/app';
-import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
+import {
+  Auth,
+  GoogleAuthProvider,
+  getAuth,
+  signInWithPopup,
+} from 'firebase/auth';
+import { Platform } from 'react-native';
+
+let auth: Auth | null = null;
+let provider: GoogleAuthProvider | null = null;
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBV2t1mZTFBOlYcMV5d0xstojiOesVblrQ',
@@ -10,6 +19,9 @@ const firebaseConfig = {
   appId: '1:774298954456:web:84cc61cf5ff0ae7f7185ad',
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const provider = new GoogleAuthProvider();
+if (Platform.OS === 'web') {
+  const app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  provider = new GoogleAuthProvider();
+}
+export { auth, provider };

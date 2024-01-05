@@ -4,40 +4,33 @@ import React, { useEffect } from 'react';
 import { Button } from 'react-native';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../firebaseConfig';
+import SignInComponent from '../components/SignIn';
 
 export default function SignInScreen() {
-  function signIn() {
-    signInWithPopup(auth, provider)
-      .then(result => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        // const credential = GoogleAuthProvider.credentialFromResult(result);
-        // const token = credential.accessToken;
+  async function signIn() {
+    let user;
+
+    try {
+      if (auth && provider) {
+        const result = await signInWithPopup(auth, provider);
+
         // The signed-in user info.
-        const user = result.user;
+        user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
-        console.log(user.displayName);
-      })
-      .catch(error => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
 
-        console.log(errorMessage);
-      });
+        return user;
+      } else {
+        throw new Error('Authentication object is null. Unable to sign in.');
+      }
+    } catch (error) {
+      // Handle Errors here.
+      console.error('Sign-in failed:', error);
+      throw error; // Re-throw the error for the caller to handle if needed
+    }
   }
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Signin Screen</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <Button title="Google Sign-In" onPress={() => signIn()} />
-    </View>
-  );
+  return <SignInComponent signIn={signIn} />;
 }
 
 const styles = StyleSheet.create({
