@@ -16,7 +16,7 @@ export default function TabLayout() {
           title: 'Home',
           headerRight: () => (
             <Link
-              href={Platform.OS === 'android' ? '/signin' : '/webSignin'}
+              href={Platform.OS === 'android' ? '/signin' : '/websignin'}
               asChild
             >
               <Pressable>
