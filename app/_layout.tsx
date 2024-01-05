@@ -53,6 +53,7 @@ function RootLayoutNav() {
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="signin" options={{ presentation: 'modal' }} />
+      <Stack.Screen name="websignin" options={{ presentation: 'modal' }} />
     </Stack>
   );
 }

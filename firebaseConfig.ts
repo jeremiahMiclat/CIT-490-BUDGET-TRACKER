@@ -5,10 +5,12 @@ import {
   getAuth,
   signInWithPopup,
 } from 'firebase/auth';
+import { getFirestore, Firestore } from 'firebase/firestore';
 import { Platform } from 'react-native';
 
 let auth: Auth | null = null;
 let provider: GoogleAuthProvider | null = null;
+let db: Firestore | null = null;
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBV2t1mZTFBOlYcMV5d0xstojiOesVblrQ',
@@ -23,5 +25,7 @@ if (Platform.OS === 'web') {
   const app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   provider = new GoogleAuthProvider();
+  db = getFirestore(app);
 }
-export { auth, provider };
+
+export { auth, provider, db };
