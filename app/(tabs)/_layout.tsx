@@ -34,14 +34,14 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="dailyLogs"
+        name="dailylogs"
         options={{
           title: 'Daily Logs',
         }}
       />
 
       <Tabs.Screen
-        name="scheduledFunds"
+        name="scheduledfunds"
         options={{
           title: 'Scheduled Funds',
         }}
