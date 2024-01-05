@@ -7,6 +7,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import React, { useEffect } from 'react';
 import { Button } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import SignInComponent from '../components/SignIn';
 
 GoogleSignin.configure({
   webClientId:
@@ -26,25 +27,7 @@ async function onGoogleButtonPress() {
   return auth().signInWithCredential(googleCredential);
 }
 export default function SignInScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Signin Screen</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-
-      <Button
-        title="Google Sign-In"
-        onPress={() =>
-          onGoogleButtonPress().then(() =>
-            console.log('Signed in with Google!')
-          )
-        }
-      />
-    </View>
-  );
+  return <SignInComponent signIn={onGoogleButtonPress} />;
 }
 
 const styles = StyleSheet.create({
