@@ -36,8 +36,6 @@ export default function HomeScreen() {
           const parsedUserData = JSON.parse(localUser);
           dispatch(counterSlice.actions.updateUser(parsedUserData));
         }
-        console.log('the initial data is: ', localData);
-        console.log('user logged in: ', localUser);
       } catch (error) {}
     };
     fetchInitialData();
