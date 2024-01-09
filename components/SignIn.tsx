@@ -18,16 +18,22 @@ export default function SignInComponent({
   const userData = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const flData = userData.existingData;
-  const renderItem = ({ item }: any) => (
-    <View style={styles.itemContainer}>
-      <Pressable style={styles.flPressable} onPress={() => setLocal(item)}>
-        <Text>{item.fieldName}</Text>
-      </Pressable>
-      <Pressable style={styles.flPressable} onPress={() => deleteOnCloud(item)}>
-        <Text>Delete</Text>
-      </Pressable>
-    </View>
-  );
+  const renderItem = ({ item }: any) =>
+    userData.isLoggedIn ? (
+      <View style={styles.itemContainer}>
+        <Pressable style={styles.flPressable} onPress={() => setLocal(item)}>
+          <Text>{item.fieldName}</Text>
+        </Pressable>
+        <Pressable
+          style={styles.flPressable}
+          onPress={() => deleteOnCloud(item)}
+        >
+          <Text>Delete</Text>
+        </Pressable>
+      </View>
+    ) : (
+      <View />
+    );
   const handleSignInPress = async () => {
     if (!userData.isLoggedIn) {
       try {

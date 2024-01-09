@@ -1,7 +1,12 @@
-import { Platform, StyleSheet } from 'react-native';
-
-import { Text, View } from '../../components/Themed';
-
+import {
+  FlatList,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, { useEffect } from 'react';
 import { Button } from 'react-native';
 import auth from '@react-native-firebase/auth';
@@ -11,6 +16,22 @@ import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, counterSlice } from '../_layout';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useNavigation, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { uploadToFirestore } from '../../functions/androidAutoUpload';
+import dayjs from 'dayjs';
+
+type RootStackParamList = {
+  Home: undefined;
+  create: undefined;
+  budgetplan: undefined;
+};
+type CreateScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'create',
+  'budgetplan'
+>;
 
 interface DataProps {
   planName: string;
@@ -18,7 +39,56 @@ interface DataProps {
 
 export default function HomeScreen() {
   const data = useSelector((state: RootState) => state.data);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
+  const navigator = useNavigation<CreateScreenNavigationProp>();
+  const handleNavToCreate = () => {
+    navigator.navigate('create');
+  };
+  const handleNavToBudgetPlan = () => {
+    navigator.navigate('budgetplan');
+  };
+  const handleDeleteItem = async (index: any) => {
+    try {
+      const newValue = [...data.value];
+      newValue.splice(index, 1);
+      const newData = {
+        identifier:
+          'Last Modified: ' + dayjs().format('MMMM D, YYYY h:mm:ss A'),
+        value: newValue,
+      };
+      console.log('Before dispatch:', data);
+      dispatch(counterSlice.actions.updateData(newData));
+      console.log('After dispatch:', data);
+      await AsyncStorage.setItem('btData', JSON.stringify(newData));
+      console.log('After AsyncStorage update:', data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const renderItem = ({ item, index }: any) => (
+    <View>
+      <Pressable>
+        <Text>{item?.planName}</Text>
+        <Text>{item?.dateAdded}</Text>
+      </Pressable>
+      <Pressable onPress={() => handleDeleteItem(index)}>
+        <Text>Delete</Text>
+      </Pressable>
+    </View>
+  );
+
+  useEffect(() => {
+    try {
+      if (Platform.OS === 'android' && user.isLoggedIn) {
+        uploadToFirestore(data, user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [data]);
+
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -67,16 +137,25 @@ export default function HomeScreen() {
         console.error(error.message);
       });
   }
-  const screenData = data as DataProps;
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{screenData.planName}</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-    </View>
+    <SafeAreaProvider style={styles.container}>
+      {data.value.length > 0 ? (
+        <FlatList
+          data={data.value}
+          renderItem={renderItem}
+          keyExtractor={(item: any) => item.dateAdded}
+        />
+      ) : (
+        <></>
+      )}
+
+      <View>
+        <Pressable onPress={() => handleNavToCreate()}>
+          <Text>Create New Plan</Text>
+        </Pressable>
+      </View>
+    </SafeAreaProvider>
   );
 }
 
@@ -85,14 +164,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 });

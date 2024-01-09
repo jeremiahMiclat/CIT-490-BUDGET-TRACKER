@@ -46,6 +46,15 @@ export default function SignInScreen() {
   // when screen is loaded
   const [dataFetched, setDataFetched] = useState(false);
 
+  const saveData = async (data: string) => {
+    await AsyncStorage.setItem('btData', data);
+    setDataFetched(true);
+  };
+
+  useEffect(() => {
+    saveData(JSON.stringify(localData));
+  }, [localData, dataFetched]);
+
   useFocusEffect(
     React.useCallback(() => {
       const fetchInitialData = async () => {
@@ -83,8 +92,8 @@ export default function SignInScreen() {
     if (userData.isLoggedIn === false) {
       //sign in user
       const res = await onGoogleButtonPress();
-      let fieldData = localData as DataProps;
-      const fieldName = fieldData.planName;
+      let fieldData = localData as any;
+      const fieldName = fieldData.identifier;
 
       // save user info starts
       if (res && res.user && res.user.uid) {
@@ -100,16 +109,28 @@ export default function SignInScreen() {
 
         // upload existing to cloud
 
-        const todate = dayjs();
-        const newFieldName =
-          fieldName + ' - (' + todate.format('MMMM D, YYYY h:mm:ss A') + ')';
-        firestore()
-          .collection('Users')
-          .doc(uid)
-          .set({ [newFieldName]: JSON.stringify(fieldData) }, { merge: true })
-          .then(() => {
-            console.log('Data uploaded!');
-          });
+        const upload = async () => {
+          const todate = dayjs();
+          const newFieldName =
+            'Date uploaded' +
+            ' - (' +
+            todate.format('MMMM D, YYYY h:mm:ss A') +
+            ')';
+          firestore()
+            .collection('Users')
+            .doc(uid)
+            .set({ [newFieldName]: JSON.stringify(fieldData) }, { merge: true })
+            .then(() => {
+              console.log('Data uploaded!');
+            });
+        };
+        const isEmpty =
+          !localData.value || Object.keys(localData.value).length === 0;
+        if (localData && !isEmpty) {
+          upload();
+        } else {
+          console.log('no data to upload');
+        }
       }
       setDataFetched(false);
       return res;
@@ -139,13 +160,19 @@ export default function SignInScreen() {
   };
 
   const setLocalData = async (item: any) => {
+    const newValue = JSON.parse(item.value);
     try {
-      const parsedVal = JSON.parse(item.value);
-      console.log('parsedUserData', parsedVal);
-      dispatch(counterSlice.actions.updateData(parsedVal));
-      await AsyncStorage.setItem('btData', item.value);
+      const newData = {
+        identifier:
+          'From cloud (' + dayjs().format('MMMM D, YYYY h:mm:ss A') + ')',
+        value: newValue.value,
+      };
+      // const parsedVal = JSON.parse(item);
+      console.log(newData);
+      dispatch(counterSlice.actions.updateData(newData));
+      // await AsyncStorage.setItem('btData', item.value);
     } catch (error) {
-      console.log('no data or invalid data');
+      console.log(error);
     }
   };
 

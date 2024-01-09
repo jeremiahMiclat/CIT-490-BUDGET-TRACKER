@@ -13,7 +13,10 @@ export default function TabLayout() {
         name="index"
         options={{
           href: null,
-          title: 'Home',
+          tabBarStyle: {
+            display: 'none',
+          },
+          title: 'Budget Plans',
           headerRight: () => (
             <Link
               href={Platform.OS === 'android' ? '/signin' : '/websignin'}
@@ -30,6 +33,13 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="create"
+        options={{
+          title: 'Create',
+          tabBarHideOnKeyboard: true,
         }}
       />
       <Tabs.Screen

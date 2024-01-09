@@ -13,7 +13,10 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
-  data: {},
+  data: {
+    identifier: '',
+    value: [],
+  },
   viewing: {},
   user: {
     isLoggedIn: false,
