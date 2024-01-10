@@ -43,7 +43,7 @@ export default function HomeScreen() {
   const dispatch = useDispatch();
   const navigator = useNavigation<CreateScreenNavigationProp>();
   const handleNavToCreate = () => {
-    navigator.navigate('create');
+    navigator.navigate('(create)' as any);
   };
   const handleNavToBudgetPlan = () => {
     navigator.navigate('budgetplan');

@@ -16,12 +16,13 @@ import { useForm, Controller } from 'react-hook-form';
 import DateTimePicker from 'react-native-ui-datepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { RootState, counterSlice } from '../_layout';
+import { RootState, counterSlice } from '../../_layout';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 type RootStackParamList = {
   index: undefined;
@@ -46,7 +47,7 @@ export default function CreatePlan() {
     await AsyncStorage.setItem('btData', data);
   };
   const navigator = useNavigation<CreateScreenNavigationProp>();
-
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -72,7 +73,7 @@ export default function CreatePlan() {
     const targetDate = dayjs(targetDateVal);
 
     const dateString = targetDate.toString();
-    setValue('date1', dateString);
+    setValue('targetDate', dateString);
     setValue('dateAdded', dayjs().format('MMMM D, YYYY h:mm:ss A'));
 
     const updatedData = getValues();
@@ -94,8 +95,14 @@ export default function CreatePlan() {
             }
       )
     );
-    navigator.navigate('index');
+
     reset();
+    router.replace('/(tabs)/');
+  };
+
+  const handlePressOnScreen = () => {
+    Keyboard.dismiss();
+    setShowTDPicker(false);
   };
 
   return (
@@ -103,10 +110,9 @@ export default function CreatePlan() {
       <TouchableWithoutFeedback onPress={handlePressOnScreen}>
         <View style={styles.container}>
           <ScrollView>
-            <View>
-              <Text>Create Screen</Text>
-
-              <View>
+            <View style={styles.scrollViewContainer}>
+              {/* DATE ADDED & TARGET DATE*/}
+              <View style={styles.scrollViewItems}>
                 <Controller
                   control={control}
                   name="dateAdded"
@@ -122,24 +128,22 @@ export default function CreatePlan() {
                       required: true,
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
-                      <>
-                        <DateTimePicker
-                          value={targetDateVal}
-                          onValueChange={(date: any) => {
-                            setTargetDateVal(date);
-                            setShowTDPicker(false);
-                          }}
-                          mode="date"
-                        />
-                        {errors.date1 && <Text>This is required.</Text>}
-                      </>
+                      <DateTimePicker
+                        value={targetDateVal}
+                        onValueChange={(date: any) => {
+                          setTargetDateVal(date);
+                          setShowTDPicker(false);
+                        }}
+                        mode="date"
+                      />
                     )}
-                    name="date1"
+                    name="targetDate"
                   />
                 )}
+                {errors.targetDate && <Text>This is required.</Text>}
               </View>
-
-              <View>
+              {/* PLAN NAME*/}
+              <View style={styles.scrollViewItems}>
                 <Controller
                   control={control}
                   rules={{
@@ -159,7 +163,29 @@ export default function CreatePlan() {
                 {errors.planName && <Text>This is required.</Text>}
               </View>
 
-              <View>
+              {/* DESCRIPTION*/}
+              <View style={styles.scrollViewItems}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      placeholder="Description"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      numberOfLines={3}
+                      textAlignVertical="top"
+                    />
+                  )}
+                  name="description"
+                />
+              </View>
+
+              {/* INITIAL BUDGET*/}
+              <View style={styles.scrollViewItems}>
                 <Controller
                   control={control}
                   rules={{
@@ -179,21 +205,45 @@ export default function CreatePlan() {
 
                 {errors.initialBudget && <Text>This is required.</Text>}
               </View>
+              <Pressable
+                style={styles.submitBtn}
+                onPress={handleSubmit(onSubmit)}
+              >
+                <Text style={styles.submitBtnTxt}>Submit</Text>
+              </Pressable>
             </View>
           </ScrollView>
-          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
 
-const handlePressOnScreen = () => {
-  Keyboard.dismiss();
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollViewContainer: {
+    flex: 1,
+
+    justifyContent: 'space-around',
+  },
+  scrollViewItems: {
+    padding: 15,
+    borderBlockColor: 'blue',
+    borderWidth: 1,
+    borderRadius: 5,
+    margin: 20,
+  },
+  submitBtn: {
+    backgroundColor: 'blue',
+    padding: 20,
+    margin: 50,
+    borderRadius: 10,
+  },
+  submitBtnTxt: {
+    color: '#ffffff',
+    alignSelf: 'center',
+    fontSize: 20,
   },
 });
