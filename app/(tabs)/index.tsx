@@ -81,7 +81,11 @@ export default function HomeScreen() {
 
   useEffect(() => {
     try {
-      if (Platform.OS === 'android' && user.isLoggedIn) {
+      if (
+        Platform.OS === 'android' &&
+        user.isLoggedIn &&
+        data.value.length > 0
+      ) {
         uploadToFirestore(data, user);
       }
     } catch (error) {

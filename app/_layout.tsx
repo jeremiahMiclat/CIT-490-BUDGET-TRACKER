@@ -23,6 +23,7 @@ const initialState = {
     id: null,
     existingData: [{ fieldName: 'no data' }],
   },
+  formData: {},
 };
 
 export const counterSlice = createSlice({
@@ -37,6 +38,9 @@ export const counterSlice = createSlice({
     },
     updateUser: (state, action) => {
       state.user = action.payload;
+    },
+    updateFormData: (state, action) => {
+      state.formData = action.payload;
     },
   },
 });
