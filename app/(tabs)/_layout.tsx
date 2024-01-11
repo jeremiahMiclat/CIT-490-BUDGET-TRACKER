@@ -12,10 +12,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          href: null,
-          tabBarStyle: {
-            display: 'none',
-          },
+          // tabBarStyle: {
+          //   display: 'none',
+          // },
           title: 'Budget Plans',
           headerRight: () => (
             <Link
@@ -41,6 +40,7 @@ export default function TabLayout() {
           title: 'Create',
           tabBarHideOnKeyboard: true,
           headerShown: false,
+          href: null,
           tabBarStyle: {
             display: 'none',
           },

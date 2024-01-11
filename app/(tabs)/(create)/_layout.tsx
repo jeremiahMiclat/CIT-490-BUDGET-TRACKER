@@ -29,6 +29,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="debtinfo"
+        options={{
+          title: 'Debts',
+          tabBarHideOnKeyboard: true,
+        }}
+      />
+      <Tabs.Screen
         name="sf"
         options={{
           title: 'Scheduled Funds',

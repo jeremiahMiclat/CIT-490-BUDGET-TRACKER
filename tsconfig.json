@@ -8,6 +8,7 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "firebaseConfig.ts"
+    "firebaseConfig.ts",
+    "app/(tabs)/(create)/debtinfo.jsx"
   ]
 }

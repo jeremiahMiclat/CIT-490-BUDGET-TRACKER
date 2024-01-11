@@ -107,114 +107,114 @@ export default function CreatePlan() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableWithoutFeedback onPress={handlePressOnScreen}>
-        <View style={styles.container}>
-          <ScrollView>
-            <View style={styles.scrollViewContainer}>
-              {/* DATE ADDED & TARGET DATE*/}
-              <View style={styles.scrollViewItems}>
+      {/* <TouchableWithoutFeedback onPress={handlePressOnScreen}> */}
+      <View style={styles.container}>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ paddingBottom: 20 }}
+        >
+          <View style={styles.scrollViewContainer}>
+            {/* DATE ADDED & TARGET DATE*/}
+            <View style={styles.scrollViewItems}>
+              <Controller
+                control={control}
+                name="dateAdded"
+                render={() => <></>}
+              />
+              <Pressable onPress={() => setShowTDPicker(!showTDPicker)}>
+                <Text>{dayjs(targetDateVal).format('MMMM DD, YYYY')}</Text>
+              </Pressable>
+              {showTDPicker && (
                 <Controller
                   control={control}
-                  name="dateAdded"
-                  render={() => <></>}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <DateTimePicker
+                      value={targetDateVal}
+                      onValueChange={(date: any) => {
+                        setTargetDateVal(date);
+                        setShowTDPicker(false);
+                      }}
+                      mode="date"
+                    />
+                  )}
+                  name="targetDate"
                 />
-                <Pressable onPress={() => setShowTDPicker(!showTDPicker)}>
-                  <Text>{dayjs(targetDateVal).format('MMMM DD, YYYY')}</Text>
-                </Pressable>
-                {showTDPicker && (
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <DateTimePicker
-                        value={targetDateVal}
-                        onValueChange={(date: any) => {
-                          setTargetDateVal(date);
-                          setShowTDPicker(false);
-                        }}
-                        mode="date"
-                      />
-                    )}
-                    name="targetDate"
+              )}
+              {errors.targetDate && <Text>This is required.</Text>}
+            </View>
+            {/* PLAN NAME*/}
+            <View style={styles.scrollViewItems}>
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    placeholder="Plan Name"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
                   />
                 )}
-                {errors.targetDate && <Text>This is required.</Text>}
-              </View>
-              {/* PLAN NAME*/}
-              <View style={styles.scrollViewItems}>
-                <Controller
-                  control={control}
-                  rules={{
-                    required: true,
-                  }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      placeholder="Plan Name"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                    />
-                  )}
-                  name="planName"
-                />
+                name="planName"
+              />
 
-                {errors.planName && <Text>This is required.</Text>}
-              </View>
-
-              {/* DESCRIPTION*/}
-              <View style={styles.scrollViewItems}>
-                <Controller
-                  control={control}
-                  rules={{
-                    required: true,
-                  }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      placeholder="Description"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      numberOfLines={3}
-                      textAlignVertical="top"
-                    />
-                  )}
-                  name="description"
-                />
-              </View>
-
-              {/* INITIAL BUDGET*/}
-              <View style={styles.scrollViewItems}>
-                <Controller
-                  control={control}
-                  rules={{
-                    required: true,
-                  }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      placeholder="Initial Budget"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      keyboardType={'number-pad'}
-                    />
-                  )}
-                  name="initialBudget"
-                />
-
-                {errors.initialBudget && <Text>This is required.</Text>}
-              </View>
-              <Pressable
-                style={styles.submitBtn}
-                onPress={handleSubmit(onSubmit)}
-              >
-                <Text style={styles.submitBtnTxt}>Submit</Text>
-              </Pressable>
+              {errors.planName && <Text>This is required.</Text>}
             </View>
-          </ScrollView>
-        </View>
-      </TouchableWithoutFeedback>
+
+            {/* DESCRIPTION*/}
+            <View style={styles.scrollViewItems}>
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    placeholder="Description"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    numberOfLines={3}
+                    textAlignVertical="top"
+                  />
+                )}
+                name="description"
+              />
+            </View>
+
+            {/* INITIAL BUDGET*/}
+            <View style={styles.scrollViewItems}>
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    placeholder="Initial Budget"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    keyboardType={'number-pad'}
+                  />
+                )}
+                name="initialBudget"
+              />
+
+              {errors.initialBudget && <Text>This is required.</Text>}
+            </View>
+          </View>
+          <Pressable style={styles.submitBtn} onPress={handleSubmit(onSubmit)}>
+            <Text style={styles.submitBtnTxt}>Submit</Text>
+          </Pressable>
+        </ScrollView>
+      </View>
+      {/* </TouchableWithoutFeedback> */}
     </SafeAreaView>
   );
 }
@@ -225,7 +225,6 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     flex: 1,
-
     justifyContent: 'space-around',
   },
   scrollViewItems: {

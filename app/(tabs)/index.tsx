@@ -148,7 +148,7 @@ export default function HomeScreen() {
         <FlatList
           data={data.value}
           renderItem={renderItem}
-          keyExtractor={(item: any) => item.dateAdded}
+          keyExtractor={(item, index: any) => index}
         />
       ) : (
         <></>
