@@ -43,6 +43,9 @@ export const counterSlice = createSlice({
     updateFormData: (state, action) => {
       state.formData = action.payload;
     },
+    updateFormSubmitted: (state, action) => {
+      state.formSubmitted = action.payload;
+    },
   },
 });
 

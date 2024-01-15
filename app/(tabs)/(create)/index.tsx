@@ -92,7 +92,7 @@ export default function CreatePlan() {
             }
       )
     );
-
+    dispatch(counterSlice.actions.updateFormSubmitted(true));
     reset();
     router.replace('/(tabs)/');
   };
