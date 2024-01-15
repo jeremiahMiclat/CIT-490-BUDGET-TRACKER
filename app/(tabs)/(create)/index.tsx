@@ -59,26 +59,23 @@ export default function CreatePlan() {
 
   useEffect(() => {
     try {
+      console.log(stateData);
       saveData(JSON.stringify(stateData));
     } catch (error) {
       console.log(error);
     }
   }, [stateData]);
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
-
   const onSubmit = (data: any) => {
+    const day = dayjs().format('MMMM D, YYYY h:mm:ss A');
     const targetDate = dayjs(targetDateVal);
 
     const dateString = targetDate.toString();
     setValue('targetDate', dateString);
-    setValue('dateAdded', dayjs().format('MMMM D, YYYY h:mm:ss A'));
+    setValue('dateAdded', day);
 
     const updatedData = getValues();
-    dispatch(counterSlice.actions.updateFormData(updatedData));
-
+    const newData = { ...updatedData, ...formData };
     dispatch(
       counterSlice.actions.updateData(
         // { value: [...localData.value, data] }
@@ -86,12 +83,12 @@ export default function CreatePlan() {
           ? {
               identifier:
                 'Date Created: ' + dayjs().format('MMMM D, YYYY h:mm:ss A'),
-              value: [...stateData.value, updatedData],
+              value: [...stateData.value, newData],
             }
           : {
               identifier:
                 'Last Modified: ' + dayjs().format('MMMM D, YYYY h:mm:ss A'),
-              value: [...stateData.value, updatedData],
+              value: [...stateData.value, newData],
             }
       )
     );

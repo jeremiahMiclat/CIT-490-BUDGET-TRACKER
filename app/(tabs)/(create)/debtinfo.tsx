@@ -18,9 +18,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import DateTimePicker from 'react-native-ui-datepicker';
 import { useEffect, useState } from 'react';
+import { RootState, counterSlice } from '../../_layout';
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function DebtInfoScreen() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const formData = useSelector((state: RootState) => state.formData);
+  const dispatch = useDispatch();
+  const [formState, setFormState] = useState({});
+  const navigation = useNavigation();
+  const formIsSubmitted = useSelector(
+    (state: RootState) => state.formSubmitted
+  );
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -45,6 +58,8 @@ export default function DebtInfoScreen() {
 
   const {
     control,
+    watch,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm();
@@ -52,24 +67,39 @@ export default function DebtInfoScreen() {
     control,
     name: 'debtInfo',
   });
-
+  const watchedFields = watch();
   const onSubmit = (data: any) => {
-    console.log(data);
+    dispatch(counterSlice.actions.updateFormData(data));
   };
 
   const handlePressOnScreen = () => {
     Keyboard.dismiss();
   };
 
+  useEffect(() => {
+    if (isFocused) {
+    } else {
+      try {
+        const a = watchedFields;
+        dispatch(counterSlice.actions.updateFormData(watchedFields));
+        reset({ debtInfo: a.debtInfo });
+      } catch (error) {
+        console.log('useEffect error');
+      }
+    }
+
+    // Cleanup function (if needed)
+    return () => {};
+  }, [isFocused]);
+
+  useEffect(() => {}, [formData]);
+
   return (
     <SafeAreaView style={styles.flex1}>
       <View style={styles.container}>
         <TouchableWithoutFeedback onPress={handlePressOnScreen}>
           <View>
-            <Pressable
-              onPress={() => append({ date: '', amount: '', description: '' })}
-              style={styles.addNewBtn}
-            >
+            <Pressable onPress={() => append({})} style={styles.addNewBtn}>
               <Text style={styles.addNewBtnText}>Add</Text>
             </Pressable>
           </View>
@@ -80,41 +110,18 @@ export default function DebtInfoScreen() {
               <View key={field.id} style={styles.fields}>
                 <Controller
                   control={control}
-                  rules={{
-                    required: true,
-                  }}
                   render={({ field: { onChange, value } }) => (
                     <TextInput
                       onChangeText={text => onChange(text)}
                       value={value}
-                      placeholder={
-                        errors.debtInfo &&
-                        // @ts-ignore
-                        errors.debtInfo[index] &&
-                        // @ts-ignore
-                        errors.debtInfo[index].description
-                          ? 'Required'
-                          : 'Date'
-                      }
-                      style={[
-                        styles.fieldInput,
-                        {
-                          borderColor:
-                            errors.debtInfo &&
-                            // @ts-ignore
-                            errors.debtInfo[index] &&
-                            // @ts-ignore
-                            errors.debtInfo[index].description
-                              ? 'red'
-                              : 'blue',
-                        },
-                      ]}
+                      placeholder={'date'}
+                      style={[styles.fieldInput]}
                     />
                   )}
                   name={`debtInfo[${index}].description`}
                 />
 
-                <Controller
+                {/* <Controller
                   control={control}
                   render={({ field: { onChange, value } }) => (
                     <TextInput
@@ -138,7 +145,7 @@ export default function DebtInfoScreen() {
                     />
                   )}
                   name={`debtInfo[${index}].dueDate`}
-                />
+                /> */}
 
                 <Pressable
                   onPress={() => remove(index)}
@@ -150,9 +157,9 @@ export default function DebtInfoScreen() {
             ))}
           </View>
         </ScrollView>
-        {isKeyboardVisible ? null : (
+        {/* {isKeyboardVisible ? null : (
           <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-        )}
+        )} */}
       </View>
     </SafeAreaView>
   );

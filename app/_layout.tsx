@@ -9,7 +9,7 @@ import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import { Provider, useDispatch } from 'react-redux';
-import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
@@ -23,7 +23,8 @@ const initialState = {
     id: null,
     existingData: [{ fieldName: 'no data' }],
   },
-  formData: {},
+  formData: { data: {}, debtInfo: {} },
+  formSubmitted: false,
 };
 
 export const counterSlice = createSlice({

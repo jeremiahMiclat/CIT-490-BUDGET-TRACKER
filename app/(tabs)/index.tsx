@@ -57,21 +57,28 @@ export default function HomeScreen() {
           'Last Modified: ' + dayjs().format('MMMM D, YYYY h:mm:ss A'),
         value: newValue,
       };
-      console.log('Before dispatch:', data);
+
       dispatch(counterSlice.actions.updateData(newData));
-      console.log('After dispatch:', data);
+
       await AsyncStorage.setItem('btData', JSON.stringify(newData));
-      console.log('After AsyncStorage update:', data);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const renderHeader = () => {
+    return (
+      <View style={styles.header}>
+        <Text>Header</Text>
+      </View>
+    );
   };
 
   const renderItem = ({ item, index }: any) => (
     <View>
       <Pressable>
         <Text>{item?.planName}</Text>
-        <Text>{item?.dateAdded}</Text>
+        <Text>{JSON.stringify(item.debtInfo)}</Text>
       </Pressable>
       <Pressable onPress={() => handleDeleteItem(index)}>
         <Text>Delete</Text>
@@ -146,9 +153,10 @@ export default function HomeScreen() {
     <SafeAreaProvider style={styles.container}>
       {data.value.length > 0 ? (
         <FlatList
+          ListHeaderComponent={renderHeader}
           data={data.value}
           renderItem={renderItem}
-          keyExtractor={(item, index: any) => index}
+          keyExtractor={(item: any) => item.dateAdded}
         />
       ) : (
         <></>
@@ -166,7 +174,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
+  header: {},
 });
