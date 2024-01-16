@@ -27,6 +27,7 @@ const initialState = {
   formDebtInfo: {},
   formSchedFunds: {},
   formBillsInfo: {},
+  formDailyBudget: {},
   formSubmitted: false,
 };
 
@@ -54,6 +55,9 @@ export const counterSlice = createSlice({
     },
     updateBillsInfoForm: (state, action) => {
       state.formBillsInfo = action.payload;
+    },
+    updateDailyBudgetForm: (state, action) => {
+      state.formDailyBudget = action.payload;
     },
     updateFormSubmitted: (state, action) => {
       state.formSubmitted = action.payload;

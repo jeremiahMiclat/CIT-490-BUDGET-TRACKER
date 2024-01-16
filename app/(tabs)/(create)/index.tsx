@@ -10,6 +10,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm, Controller } from 'react-hook-form';
@@ -22,8 +23,9 @@ import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
-
+import { Link, useRouter } from 'expo-router';
+import Restart from 'react-native-restart';
+import { router } from 'expo-router';
 type RootStackParamList = {
   index: undefined;
   Home: undefined;
@@ -37,6 +39,7 @@ type CreateScreenNavigationProp = StackNavigationProp<
 >;
 
 export default function CreatePlan() {
+  const [isLoading, setIsLoading] = useState(false);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const dispatch = useDispatch();
   const stateData = useSelector((state: RootState) => state.data);
@@ -46,6 +49,9 @@ export default function CreatePlan() {
     (state: RootState) => state.formSchedFunds
   );
   const billsInfoData = useSelector((state: RootState) => state.formBillsInfo);
+  const dailyBudgetInfo = useSelector(
+    (state: RootState) => state.formDailyBudget
+  );
   const [showTDPicker, setShowTDPicker] = useState(false);
   const initialTargetDateVal = dayjs().add(30, 'day');
   const [targetDateVal, setTargetDateVal] = useState(initialTargetDateVal);
@@ -53,7 +59,7 @@ export default function CreatePlan() {
     await AsyncStorage.setItem('btData', data);
   };
   const navigator = useNavigation<CreateScreenNavigationProp>();
-  const router = useRouter();
+  const navRouter = useRouter();
   const {
     control,
     handleSubmit,
@@ -83,39 +89,51 @@ export default function CreatePlan() {
   }, [showTDPicker]);
 
   const onSubmit = (data: any) => {
-    const day = dayjs().format('MMMM D, YYYY h:mm:ss A');
-    const targetDate = dayjs(targetDateVal);
+    try {
+      setIsLoading(true);
 
-    const dateString = targetDate.toString();
-    setValue('targetDate', dateString);
-    setValue('dateAdded', day);
+      const day = dayjs().format('MMMM D, YYYY h:mm:ss A');
+      const targetDate = dayjs(targetDateVal);
 
-    const updatedData = getValues();
-    const newData = {
-      ...updatedData,
-      ...debtInfoData,
-      ...schedFundsInfoData,
-      ...billsInfoData,
-    };
-    dispatch(
-      counterSlice.actions.updateData(
-        // { value: [...localData.value, data] }
-        stateData.value.length < 1
-          ? {
-              identifier:
-                'Date Created: ' + dayjs().format('MMMM D, YYYY h:mm:ss A'),
-              value: [...stateData.value, newData],
-            }
-          : {
-              identifier:
-                'Last Modified: ' + dayjs().format('MMMM D, YYYY h:mm:ss A'),
-              value: [...stateData.value, newData],
-            }
-      )
-    );
-    dispatch(counterSlice.actions.updateFormSubmitted(true));
-    reset();
-    router.replace('/(tabs)/');
+      const dateString = targetDate.toString();
+      setValue('targetDate', dateString);
+      setValue('dateAdded', day);
+
+      const updatedData = getValues();
+      const newData = {
+        ...updatedData,
+        ...debtInfoData,
+        ...schedFundsInfoData,
+        ...billsInfoData,
+        ...dailyBudgetInfo,
+      };
+      dispatch(
+        counterSlice.actions.updateData(
+          // { value: [...localData.value, data] }
+          stateData.value.length < 1
+            ? {
+                identifier:
+                  'Date Created: ' + dayjs().format('MMMM D, YYYY h:mm:ss A'),
+                value: [...stateData.value, newData],
+              }
+            : {
+                identifier:
+                  'Last Modified: ' + dayjs().format('MMMM D, YYYY h:mm:ss A'),
+                value: [...stateData.value, newData],
+              }
+        )
+      );
+      dispatch(counterSlice.actions.updateFormSubmitted(true));
+      reset();
+      // Restart.Restart();
+      // navRouter.replace('/(tabs)/');
+
+      router.replace('/(tabs)/');
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handlePressOnScreen = () => {
@@ -144,7 +162,11 @@ export default function CreatePlan() {
     };
   }, []);
 
-  return (
+  return isLoading ? (
+    <View style={styles.container}>
+      <ActivityIndicator size="large" color="#00ff00" />
+    </View>
+  ) : (
     <SafeAreaView style={styles.container}>
       {/* <TouchableWithoutFeedback onPress={handlePressOnScreen}> */}
       <View style={styles.container}>

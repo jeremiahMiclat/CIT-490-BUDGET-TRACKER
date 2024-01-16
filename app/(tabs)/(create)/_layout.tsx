@@ -8,7 +8,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Create Screen',
+          title: 'Submit',
           tabBarHideOnKeyboard: true,
           headerRight: () => (
             <Link
@@ -29,6 +29,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="dailybudget"
+        options={{
+          title: 'Dailies',
+          tabBarHideOnKeyboard: true,
+        }}
+      />
+      <Tabs.Screen
         name="debtinfo"
         options={{
           title: 'Debts',
@@ -45,7 +52,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="sf"
         options={{
-          title: 'Scheduled Funds',
+          title: 'Scheduled',
           tabBarHideOnKeyboard: true,
         }}
       />

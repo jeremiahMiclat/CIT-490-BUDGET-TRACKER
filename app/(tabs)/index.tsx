@@ -81,6 +81,7 @@ export default function HomeScreen() {
         <Text>{JSON.stringify(item.debtInfo)}</Text>
         <Text>{JSON.stringify(item.schedFundsInfo)}</Text>
         <Text>{JSON.stringify(item.billsInfo)}</Text>
+        <Text>{JSON.stringify(item.dailyBudgetInfo)}</Text>
       </Pressable>
       <Pressable onPress={() => handleDeleteItem(index)}>
         <Text>Delete</Text>
