@@ -24,10 +24,10 @@ import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
 import dayjs from 'dayjs';
 
-export default function ScheduledFundsCreateScreen() {
+export default function DebtInfoScreen() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const formData = useSelector((state: RootState) => state.formData);
-  const debtInfoData = useSelector((state: RootState) => state.formDebtInfo);
+  const billsInfoData = useSelector((state: RootState) => state.formDebtInfo);
   const dispatch = useDispatch();
   const [formState, setFormState] = useState({});
   const navigation = useNavigation();
@@ -66,7 +66,7 @@ export default function ScheduledFundsCreateScreen() {
       return updatedValues;
     });
 
-    setValue(`schedFundsInfo[${index}].date`, date);
+    setValue(`billsInfo[${index}].startDate`, date);
   };
 
   const [DdatePickerIndex, setDDatePickerIndex] = useState(null);
@@ -100,7 +100,7 @@ export default function ScheduledFundsCreateScreen() {
       return updatedValues;
     });
 
-    setValue(`debtInfo[${index}].dueDate`, date);
+    setValue(`billsInfo[${index}].dueDate`, date);
   };
 
   const isFocused = useIsFocused();
@@ -138,7 +138,7 @@ export default function ScheduledFundsCreateScreen() {
   } = useForm();
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'schedFundsInfo',
+    name: 'billsInfo',
   });
   const watchedFields = watch();
   const onSubmit = (data: any) => {
@@ -160,8 +160,8 @@ export default function ScheduledFundsCreateScreen() {
     if (isFocused) {
     } else {
       try {
-        dispatch(counterSlice.actions.updateSchedFundForm(watch()));
-        reset({ schedFundsInfo: watch().schedFundsInfo });
+        dispatch(counterSlice.actions.updateBillsInfoForm(watch()));
+        reset({ billsInfo: watch().billsInfo });
       } catch (error) {
         console.log('useEffect error');
       }
@@ -201,7 +201,7 @@ export default function ScheduledFundsCreateScreen() {
                         value={value}
                       />
                     )}
-                    name={`schedFundsInfo[${index}].description`}
+                    name={`billsInfo[${index}].description`}
                   />
                 </View>
 
@@ -214,9 +214,9 @@ export default function ScheduledFundsCreateScreen() {
                           <TextInput
                             value={
                               OdateValues[index] != undefined
-                                ? 'Date: ' +
+                                ? 'Start Date: ' +
                                   OdateValues[index].format('MMMM DD, YYYY')
-                                : 'Set Date'
+                                : 'Set Start Date'
                             }
                             editable={false}
                             style={styles.dateInput}
@@ -224,7 +224,7 @@ export default function ScheduledFundsCreateScreen() {
                         </Pressable>
                       </>
                     )}
-                    name={`schedFundsInfo[${index}].date`}
+                    name={`billsInfo[${index}].startDate`}
                   />
                 </View>
 
@@ -248,11 +248,11 @@ export default function ScheduledFundsCreateScreen() {
                         keyboardType={'number-pad'}
                       />
                     )}
-                    name={`schedFundsInfo[${index}].amount`}
+                    name={`billsInfo[${index}].amount`}
                   />
                 </View>
 
-                {/* <View style={styles.items}>
+                <View style={styles.items}>
                   <Controller
                     control={control}
                     render={({ field: { onChange, value } }) => (
@@ -271,7 +271,7 @@ export default function ScheduledFundsCreateScreen() {
                         </Pressable>
                       </>
                     )}
-                    name={`debtInfo[${index}].dueDate`}
+                    name={`billsInfo[${index}].dueDate`}
                   />
                 </View>
 
@@ -281,7 +281,7 @@ export default function ScheduledFundsCreateScreen() {
                     onValueChange={date => handleDDateConfirm(date, index)}
                     value={DdateValues[index] || day}
                   />
-                )} */}
+                )}
 
                 <Pressable
                   onPress={() => [remove(index), removeAll(index)]}

@@ -37,9 +37,15 @@ type CreateScreenNavigationProp = StackNavigationProp<
 >;
 
 export default function CreatePlan() {
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const dispatch = useDispatch();
   const stateData = useSelector((state: RootState) => state.data);
   const formData = useSelector((state: RootState) => state.formData);
+  const debtInfoData = useSelector((state: RootState) => state.formDebtInfo);
+  const schedFundsInfoData = useSelector(
+    (state: RootState) => state.formSchedFunds
+  );
+  const billsInfoData = useSelector((state: RootState) => state.formBillsInfo);
   const [showTDPicker, setShowTDPicker] = useState(false);
   const initialTargetDateVal = dayjs().add(30, 'day');
   const [targetDateVal, setTargetDateVal] = useState(initialTargetDateVal);
@@ -66,6 +72,16 @@ export default function CreatePlan() {
     }
   }, [stateData]);
 
+  useEffect(() => {
+    if (showTDPicker) {
+      try {
+        Keyboard.dismiss();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [showTDPicker]);
+
   const onSubmit = (data: any) => {
     const day = dayjs().format('MMMM D, YYYY h:mm:ss A');
     const targetDate = dayjs(targetDateVal);
@@ -75,7 +91,12 @@ export default function CreatePlan() {
     setValue('dateAdded', day);
 
     const updatedData = getValues();
-    const newData = { ...updatedData, ...formData };
+    const newData = {
+      ...updatedData,
+      ...debtInfoData,
+      ...schedFundsInfoData,
+      ...billsInfoData,
+    };
     dispatch(
       counterSlice.actions.updateData(
         // { value: [...localData.value, data] }
@@ -101,6 +122,27 @@ export default function CreatePlan() {
     Keyboard.dismiss();
     setShowTDPicker(false);
   };
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setShowTDPicker(false);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    // Clean up listeners when component unmounts
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

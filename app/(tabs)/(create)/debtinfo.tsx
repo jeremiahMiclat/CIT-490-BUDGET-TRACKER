@@ -27,6 +27,7 @@ import dayjs from 'dayjs';
 export default function DebtInfoScreen() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const formData = useSelector((state: RootState) => state.formData);
+  const debtInfoData = useSelector((state: RootState) => state.formDebtInfo);
   const dispatch = useDispatch();
   const [formState, setFormState] = useState({});
   const navigation = useNavigation();
@@ -38,6 +39,11 @@ export default function DebtInfoScreen() {
   const [OdateValues, setODateValues] = useState<any>([]);
 
   const showODatePicker = (index: any) => {
+    try {
+      Keyboard.dismiss();
+    } catch (error) {
+      console.log(error);
+    }
     setODatePickerIndex(prevIndex => {
       if (prevIndex === null || prevIndex !== index) {
         return index;
@@ -60,13 +66,18 @@ export default function DebtInfoScreen() {
       return updatedValues;
     });
 
-    setValue(`debtInfo[${index}].dateOccured`, date);
+    setValue(`debtInfo[${index}].dateIncurred`, date);
   };
 
   const [DdatePickerIndex, setDDatePickerIndex] = useState(null);
   const [DdateValues, setDDateValues] = useState<any>([]);
 
   const showDDatePicker = (index: any) => {
+    try {
+      Keyboard.dismiss();
+    } catch (error) {
+      console.log(error);
+    }
     setDDatePickerIndex(prevIndex => {
       if (prevIndex === null || prevIndex !== index) {
         return index;
@@ -98,7 +109,8 @@ export default function DebtInfoScreen() {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
-        setKeyboardVisible(true);
+        hideDDatePicker();
+        hideODatePicker();
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
@@ -140,13 +152,15 @@ export default function DebtInfoScreen() {
   const removeAll = (index: any) => {
     setODateValues([]);
     setDDateValues([]);
+    showDDatePicker(null);
+    showODatePicker(null);
   };
 
   useEffect(() => {
     if (isFocused) {
     } else {
       try {
-        dispatch(counterSlice.actions.updateFormData(watch()));
+        dispatch(counterSlice.actions.updateDebtInfoForm(watch()));
         reset({ debtInfo: watch().debtInfo });
       } catch (error) {
         console.log('useEffect error');
@@ -164,7 +178,10 @@ export default function DebtInfoScreen() {
       <View style={styles.container}>
         <TouchableWithoutFeedback onPress={handlePressOnScreen}>
           <View>
-            <Pressable onPress={() => [append({})]} style={styles.addNewBtn}>
+            <Pressable
+              onPress={() => [append({ description: null, amount: null })]}
+              style={styles.addNewBtn}
+            >
               <Text style={styles.addNewBtnText}>Add</Text>
             </Pressable>
           </View>
@@ -172,8 +189,8 @@ export default function DebtInfoScreen() {
         <ScrollView style={styles.sv} keyboardShouldPersistTaps="handled">
           <View style={styles.flex1}>
             {fields.map((field, index) => (
-              <View key={field.id} style={styles.fields}>
-                <View>
+              <View key={field.id} style={styles.itemsContainer}>
+                <View style={styles.items}>
                   <Controller
                     control={control}
                     render={({ field: { onChange, onBlur, value } }) => (
@@ -188,7 +205,7 @@ export default function DebtInfoScreen() {
                   />
                 </View>
 
-                <View>
+                <View style={styles.items}>
                   <Controller
                     control={control}
                     render={({ field: { onChange, value } }) => (
@@ -197,16 +214,17 @@ export default function DebtInfoScreen() {
                           <TextInput
                             value={
                               OdateValues[index] != undefined
-                                ? 'Date: ' +
+                                ? 'Date Incurred: ' +
                                   OdateValues[index].format('MMMM DD, YYYY')
-                                : 'Date: ' + day.format('MMMM DD, YYYY')
+                                : 'Set Date Incurred'
                             }
                             editable={false}
+                            style={styles.dateInput}
                           />
                         </Pressable>
                       </>
                     )}
-                    name={`debtInfo[${index}].dateOccured`}
+                    name={`debtInfo[${index}].dateIncurred`}
                   />
                 </View>
 
@@ -218,39 +236,44 @@ export default function DebtInfoScreen() {
                   />
                 )}
 
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      placeholder="Amount"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      keyboardType={'number-pad'}
-                    />
-                  )}
-                  name={`debtInfo[${index}].amount`}
-                />
+                <View style={styles.items}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        placeholder="Amount"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        keyboardType={'number-pad'}
+                      />
+                    )}
+                    name={`debtInfo[${index}].amount`}
+                  />
+                </View>
 
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <>
-                      <Pressable onPress={() => showDDatePicker(index)}>
-                        <TextInput
-                          value={
-                            DdateValues[index] != undefined
-                              ? 'Due Date: ' +
-                                DdateValues[index].format('MMMM DD, YYYY')
-                              : 'Due Date: ' + day.format('MMMM DD, YYYY')
-                          }
-                          editable={false}
-                        />
-                      </Pressable>
-                    </>
-                  )}
-                  name={`debtInfo[${index}].dueDate`}
-                />
+                <View style={styles.items}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <>
+                        <Pressable onPress={() => showDDatePicker(index)}>
+                          <TextInput
+                            value={
+                              DdateValues[index] != undefined
+                                ? 'Due Date: ' +
+                                  DdateValues[index].format('MMMM DD, YYYY')
+                                : 'Set Due Date'
+                            }
+                            editable={false}
+                            style={styles.dateInput}
+                          />
+                        </Pressable>
+                      </>
+                    )}
+                    name={`debtInfo[${index}].dueDate`}
+                  />
+                </View>
 
                 {DdatePickerIndex === index && (
                   <DateTimePicker
@@ -328,5 +351,23 @@ const styles = StyleSheet.create({
   },
   hidden: {
     display: 'none',
+  },
+  itemsContainer: {
+    flex: 1,
+    borderColor: 'blue',
+    borderWidth: 1,
+    borderRadius: 10,
+    margin: 10,
+    padding: 10,
+  },
+  items: {
+    padding: 10,
+    borderColor: 'blue',
+    borderWidth: 0.5,
+    borderRadius: 10,
+    margin: 10,
+  },
+  dateInput: {
+    color: 'black',
   },
 });
