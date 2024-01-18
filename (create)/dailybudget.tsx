@@ -18,7 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import DateTimePicker from 'react-native-ui-datepicker';
 import { useEffect, useState } from 'react';
-import { RootState, counterSlice } from '../../_layout';
+import { RootState, counterSlice } from '../app/_layout';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';

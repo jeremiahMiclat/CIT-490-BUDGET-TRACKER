@@ -18,16 +18,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import DateTimePicker from 'react-native-ui-datepicker';
 import { useEffect, useState } from 'react';
-import { RootState, counterSlice } from '../../_layout';
+import { RootState, counterSlice } from '../app/_layout';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
 import dayjs from 'dayjs';
 
-export default function BillsInfoScreen() {
+export default function ScheduledFundsCreateScreen() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const formData = useSelector((state: RootState) => state.formData);
-  const billsInfoData = useSelector((state: RootState) => state.formDebtInfo);
+  const debtInfoData = useSelector((state: RootState) => state.formDebtInfo);
   const dispatch = useDispatch();
   const [formState, setFormState] = useState({});
   const navigation = useNavigation();
@@ -66,7 +66,7 @@ export default function BillsInfoScreen() {
       return updatedValues;
     });
 
-    setValue(`billsInfo[${index}].startDate`, date);
+    setValue(`schedFundsInfo[${index}].date`, date);
   };
 
   const [DdatePickerIndex, setDDatePickerIndex] = useState(null);
@@ -100,7 +100,7 @@ export default function BillsInfoScreen() {
       return updatedValues;
     });
 
-    setValue(`billsInfo[${index}].dueDate`, date);
+    setValue(`debtInfo[${index}].dueDate`, date);
   };
 
   const isFocused = useIsFocused();
@@ -138,7 +138,7 @@ export default function BillsInfoScreen() {
   } = useForm();
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'billsInfo',
+    name: 'schedFundsInfo',
   });
   const watchedFields = watch();
   const onSubmit = (data: any) => {
@@ -160,8 +160,8 @@ export default function BillsInfoScreen() {
     if (isFocused) {
     } else {
       try {
-        dispatch(counterSlice.actions.updateBillsInfoForm(watch()));
-        reset({ billsInfo: watch().billsInfo });
+        dispatch(counterSlice.actions.updateSchedFundForm(watch()));
+        reset({ schedFundsInfo: watch().schedFundsInfo });
       } catch (error) {
         console.log('useEffect error');
       }
@@ -201,7 +201,7 @@ export default function BillsInfoScreen() {
                         value={value}
                       />
                     )}
-                    name={`billsInfo[${index}].description`}
+                    name={`schedFundsInfo[${index}].description`}
                   />
                 </View>
 
@@ -214,9 +214,9 @@ export default function BillsInfoScreen() {
                           <TextInput
                             value={
                               OdateValues[index] != undefined
-                                ? 'Start Date: ' +
+                                ? 'Date: ' +
                                   OdateValues[index].format('MMMM DD, YYYY')
-                                : 'Set Start Date'
+                                : 'Set Date'
                             }
                             editable={false}
                             style={styles.dateInput}
@@ -224,7 +224,7 @@ export default function BillsInfoScreen() {
                         </Pressable>
                       </>
                     )}
-                    name={`billsInfo[${index}].startDate`}
+                    name={`schedFundsInfo[${index}].date`}
                   />
                 </View>
 
@@ -248,11 +248,11 @@ export default function BillsInfoScreen() {
                         keyboardType={'number-pad'}
                       />
                     )}
-                    name={`billsInfo[${index}].amount`}
+                    name={`schedFundsInfo[${index}].amount`}
                   />
                 </View>
 
-                <View style={styles.items}>
+                {/* <View style={styles.items}>
                   <Controller
                     control={control}
                     render={({ field: { onChange, value } }) => (
@@ -271,7 +271,7 @@ export default function BillsInfoScreen() {
                         </Pressable>
                       </>
                     )}
-                    name={`billsInfo[${index}].dueDate`}
+                    name={`debtInfo[${index}].dueDate`}
                   />
                 </View>
 
@@ -281,7 +281,7 @@ export default function BillsInfoScreen() {
                     onValueChange={date => handleDDateConfirm(date, index)}
                     value={DdateValues[index] || day}
                   />
-                )}
+                )} */}
 
                 <Pressable
                   onPress={() => [remove(index), removeAll(index)]}

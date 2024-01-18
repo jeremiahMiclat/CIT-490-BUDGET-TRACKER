@@ -9,7 +9,7 @@ import { Button } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import SignInComponent from '../components/SignIn';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, counterSlice } from './_layout';
+import { RootState, counterSlice } from '../app/_layout';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs from 'dayjs';

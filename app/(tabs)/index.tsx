@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 import React, { useEffect } from 'react';
 import { Button } from 'react-native';
-import auth from '@react-native-firebase/auth';
-import { db } from '../../firebaseConfig';
-import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
-import firestore from '@react-native-firebase/firestore';
+// import auth from '@react-native-firebase/auth';
+// import { db } from '../../firebaseConfig';
+// import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+// import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, counterSlice } from '../_layout';
@@ -89,19 +89,17 @@ export default function HomeScreen() {
     </View>
   );
 
-  useEffect(() => {
-    try {
-      if (
-        Platform.OS === 'android' &&
-        user.isLoggedIn &&
-        data.value.length > 0
-      ) {
-        uploadToFirestore(data, user);
+  if (Platform.OS === 'android') {
+    useEffect(() => {
+      try {
+        if (user.isLoggedIn && data.value.length > 0) {
+          uploadToFirestore(data, user);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [data]);
+    }, [data]);
+  }
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -124,33 +122,6 @@ export default function HomeScreen() {
     };
     fetchInitialData();
   }, []);
-
-  async function getTestData() {
-    let data;
-    if (db) {
-      try {
-        const testDocRef = doc(db, 'Users', 'test');
-        const testDocSnap = await getDoc(testDocRef);
-        data = testDocSnap.data();
-      } catch (error) {
-        throw new Error('Firebase firestore error');
-      }
-    }
-
-    if (data) {
-      return data.data;
-    }
-  }
-
-  if (Platform.OS === 'web') {
-    getTestData()
-      .then(testData => {
-        console.log(testData);
-      })
-      .catch(error => {
-        console.error(error.message);
-      });
-  }
 
   return (
     <SafeAreaProvider style={styles.container}>

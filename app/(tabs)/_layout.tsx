@@ -17,10 +17,7 @@ export default function TabLayout() {
           // },
           title: 'Budget Plans',
           headerRight: () => (
-            <Link
-              href={Platform.OS === 'android' ? '/signin' : '/websignin'}
-              asChild
-            >
+            <Link href={'/account'} asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -34,7 +31,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="(create)"
         options={{
           title: 'Create',
@@ -45,7 +42,7 @@ export default function TabLayout() {
             display: 'none',
           },
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="dailylogs"
         options={{
