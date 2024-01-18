@@ -18,16 +18,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import DateTimePicker from 'react-native-ui-datepicker';
 import { useEffect, useState } from 'react';
-import { RootState, counterSlice } from '../app/_layout';
+import { RootState, counterSlice } from '../../app/_layout';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
 import dayjs from 'dayjs';
 
-export default function DebtInfoScreen() {
+export default function BillsInfoScreen() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const formData = useSelector((state: RootState) => state.formData);
-  const debtInfoData = useSelector((state: RootState) => state.formDebtInfo);
+  const billsInfoData = useSelector((state: RootState) => state.formDebtInfo);
   const dispatch = useDispatch();
   const [formState, setFormState] = useState({});
   const navigation = useNavigation();
@@ -66,7 +66,7 @@ export default function DebtInfoScreen() {
       return updatedValues;
     });
 
-    setValue(`dailyBudgetInfo[${index}].startDate`, date);
+    setValue(`billsInfo[${index}].startDate`, date);
   };
 
   const [DdatePickerIndex, setDDatePickerIndex] = useState(null);
@@ -100,7 +100,7 @@ export default function DebtInfoScreen() {
       return updatedValues;
     });
 
-    setValue(`dailyBudgetInfo[${index}].endDate`, date);
+    setValue(`billsInfo[${index}].dueDate`, date);
   };
 
   const isFocused = useIsFocused();
@@ -136,9 +136,9 @@ export default function DebtInfoScreen() {
     setValue,
     formState: { errors },
   } = useForm();
-  let { fields, append, remove } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
-    name: 'dailyBudgetInfo',
+    name: 'billsInfo',
   });
   const watchedFields = watch();
   const onSubmit = (data: any) => {
@@ -156,14 +156,12 @@ export default function DebtInfoScreen() {
     showODatePicker(null);
   };
 
-  useEffect(() => {}, [formIsSubmitted]);
-
   useEffect(() => {
     if (isFocused) {
     } else {
       try {
-        dispatch(counterSlice.actions.updateDailyBudgetForm(watch()));
-        reset({ dailyBudgetInfo: watch().dailyBudgetInfo });
+        dispatch(counterSlice.actions.updateBillsInfoForm(watch()));
+        reset({ billsInfo: watch().billsInfo });
       } catch (error) {
         console.log('useEffect error');
       }
@@ -172,6 +170,8 @@ export default function DebtInfoScreen() {
     // Cleanup function (if needed)
     return () => {};
   }, [isFocused]);
+
+  useEffect(() => {}, [formData]);
 
   return (
     <SafeAreaView style={styles.flex1}>
@@ -201,23 +201,7 @@ export default function DebtInfoScreen() {
                         value={value}
                       />
                     )}
-                    name={`dailyBudgetInfo[${index}].description`}
-                  />
-                </View>
-
-                <View style={styles.items}>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <TextInput
-                        placeholder="Amount"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        keyboardType={'number-pad'}
-                      />
-                    )}
-                    name={`dailyBudgetInfo[${index}].amount`}
+                    name={`billsInfo[${index}].description`}
                   />
                 </View>
 
@@ -240,7 +224,7 @@ export default function DebtInfoScreen() {
                         </Pressable>
                       </>
                     )}
-                    name={`dailyBudgetInfo[${index}].startDate`}
+                    name={`billsInfo[${index}].startDate`}
                   />
                 </View>
 
@@ -255,15 +239,31 @@ export default function DebtInfoScreen() {
                 <View style={styles.items}>
                   <Controller
                     control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        placeholder="Amount"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        keyboardType={'number-pad'}
+                      />
+                    )}
+                    name={`billsInfo[${index}].amount`}
+                  />
+                </View>
+
+                <View style={styles.items}>
+                  <Controller
+                    control={control}
                     render={({ field: { onChange, value } }) => (
                       <>
                         <Pressable onPress={() => showDDatePicker(index)}>
                           <TextInput
                             value={
                               DdateValues[index] != undefined
-                                ? 'End Date: ' +
+                                ? 'Due Date: ' +
                                   DdateValues[index].format('MMMM DD, YYYY')
-                                : 'Set End Date'
+                                : 'Set Due Date'
                             }
                             editable={false}
                             style={styles.dateInput}
@@ -271,7 +271,7 @@ export default function DebtInfoScreen() {
                         </Pressable>
                       </>
                     )}
-                    name={`dailyBudgetInfo[${index}].endDate`}
+                    name={`billsInfo[${index}].dueDate`}
                   />
                 </View>
 

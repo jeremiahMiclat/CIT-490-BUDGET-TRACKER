@@ -2,22 +2,16 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import { Platform, Pressable, useColorScheme } from 'react-native';
 
-import Colors from '../../constants/Colors';
-
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs>
       <Tabs.Screen
         name="index"
         options={{
-          // tabBarStyle: {
-          //   display: 'none',
-          // },
-          title: 'Budget Plans',
+          title: 'Submit',
+          tabBarHideOnKeyboard: true,
           headerRight: () => (
-            <Link href={'/account'} asChild>
+            <Link href={'/(tabs)/account'} asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -32,28 +26,31 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="(create)"
+        name="dailybudget"
         options={{
-          title: 'Create',
+          title: 'Dailies',
           tabBarHideOnKeyboard: true,
-          headerShown: false,
-          // href: null,
-          tabBarStyle: {
-            display: 'none',
-          },
         }}
       />
       <Tabs.Screen
-        name="dailylogs"
+        name="debtinfo"
         options={{
-          title: 'Daily Logs',
+          title: 'Debts',
+          tabBarHideOnKeyboard: true,
         }}
       />
-
       <Tabs.Screen
-        name="scheduledfunds"
+        name="billsinfo"
         options={{
-          title: 'Scheduled Funds',
+          title: 'Bills',
+          tabBarHideOnKeyboard: true,
+        }}
+      />
+      <Tabs.Screen
+        name="sf"
+        options={{
+          title: 'Scheduled',
+          tabBarHideOnKeyboard: true,
         }}
       />
     </Tabs>

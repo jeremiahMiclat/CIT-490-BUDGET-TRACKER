@@ -17,7 +17,7 @@ import { useForm, Controller } from 'react-hook-form';
 import DateTimePicker from 'react-native-ui-datepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { RootState, counterSlice } from '../app/_layout';
+import { RootState, counterSlice } from '../../app/_layout';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';

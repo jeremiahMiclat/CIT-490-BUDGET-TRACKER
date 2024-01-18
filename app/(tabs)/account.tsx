@@ -1,8 +1,14 @@
 import { Platform } from 'react-native';
 import SignInScreen from '../../accountsRoute/signin';
-import WebSignInScreen from '../../accountsRoute/websignin';
+import WebSignInScreen from '../../webComponents/websignin';
 
 export default function AccountScreen() {
-  return <WebSignInScreen />;
-  //   Platform.OS === 'android' ? <SignInScreen /> :
+  if (Platform.OS === 'web') {
+    return <WebSignInScreen />;
+  }
+  if (Platform.OS === 'android') {
+    return <SignInScreen />;
+  }
+
+  // return Platform.OS === 'web' ? <WebSignInScreen /> : <></>;
 }

@@ -9,6 +9,6 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "firebaseConfig.ts",
-    "(create)/debtinfo.jsx"
+    "androidComponents/(create)/debtinfo.jsx"
   ]
 }
