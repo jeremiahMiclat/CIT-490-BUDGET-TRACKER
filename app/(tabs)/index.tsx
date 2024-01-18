@@ -9,10 +9,9 @@ import {
 } from 'react-native';
 import React, { useEffect } from 'react';
 import { Button } from 'react-native';
-// import auth from '@react-native-firebase/auth';
-// import { db } from '../../firebaseConfig';
+import auth from '@react-native-firebase/auth';
 // import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
-// import firestore from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, counterSlice } from '../_layout';
@@ -122,6 +121,33 @@ export default function HomeScreen() {
     };
     fetchInitialData();
   }, []);
+
+  // async function getTestData() {
+  //   let data;
+  //   if (db) {
+  //     try {
+  //       const testDocRef = doc(db, 'Users', 'test');
+  //       const testDocSnap = await getDoc(testDocRef);
+  //       data = testDocSnap.data();
+  //     } catch (error) {
+  //       throw new Error('Firebase firestore error');
+  //     }
+  //   }
+
+  //   if (data) {
+  //     return data.data;
+  //   }
+  // }
+
+  // if (Platform.OS === 'web') {
+  //   getTestData()
+  //     .then(testData => {
+  //       console.log(testData);
+  //     })
+  //     .catch(error => {
+  //       console.error(error.message);
+  //     });
+  // }
 
   return (
     <SafeAreaProvider style={styles.container}>
