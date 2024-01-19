@@ -21,6 +21,8 @@ import { useNavigation, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { uploadToFirestore } from '../../functions/androidAutoUpload';
 import dayjs from 'dayjs';
+import { AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 type RootStackParamList = {
   Home: undefined;
@@ -67,24 +69,26 @@ export default function HomeScreen() {
   };
 
   const renderHeader = () => {
-    return (
-      <View style={styles.header}>
-        <Text>Header</Text>
-      </View>
+    return data.value.length < 1 ? (
+      <Text style={styles.flheader}>No saved plans</Text>
+    ) : (
+      <View style={styles.divider}></View>
     );
   };
 
   const renderItem = ({ item, index }: any) => (
-    <View>
-      <Pressable>
+    <View style={styles.itemsContainer}>
+      <Pressable
+        style={styles.item}
+        onPress={() => {
+          dispatch(counterSlice.actions.updateViewing(item));
+          handleNavToBudgetPlan();
+        }}
+      >
         <Text>{item?.planName}</Text>
-        <Text>{JSON.stringify(item.debtInfo)}</Text>
-        <Text>{JSON.stringify(item.schedFundsInfo)}</Text>
-        <Text>{JSON.stringify(item.billsInfo)}</Text>
-        <Text>{JSON.stringify(item.dailyBudgetInfo)}</Text>
       </Pressable>
-      <Pressable onPress={() => handleDeleteItem(index)}>
-        <Text>Delete</Text>
+      <Pressable onPress={() => handleDeleteItem(index)} style={styles.delBtn}>
+        <AntDesign name="delete" size={18} color="blue" />
       </Pressable>
     </View>
   );
@@ -152,22 +156,31 @@ export default function HomeScreen() {
   //     });
   // }
 
+  const renderFLFooter = () => {
+    return (
+      <View style={styles.flFooter}>
+        <Pressable onPress={() => handleNavToCreate()}>
+          <Ionicons name="add-circle-sharp" size={24} color="black" />
+          <Text>Create New Plan</Text>
+        </Pressable>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaProvider style={styles.container}>
-      {data.value.length > 0 ? (
-        <FlatList
-          ListHeaderComponent={renderHeader}
-          data={data.value}
-          renderItem={renderItem}
-          keyExtractor={(item: any) => item.dateAdded}
-        />
-      ) : (
-        <></>
-      )}
-
-      <View>
-        <Pressable onPress={() => handleNavToCreate()}>
-          <Text>Create New Plan</Text>
+      <FlatList
+        style={styles.flContainer}
+        ListHeaderComponent={renderHeader}
+        // ListFooterComponent={renderFLFooter}
+        data={data.value}
+        renderItem={renderItem}
+        keyExtractor={(item: any) => item.dateAdded}
+      />
+      <View style={styles.flFooter}>
+        <Pressable onPress={() => handleNavToCreate()} style={styles.row}>
+          {/* <Text>Add New Plan</Text> */}
+          <Ionicons name="add-circle-sharp" size={50} color="black" />
         </Pressable>
       </View>
     </SafeAreaProvider>
@@ -178,5 +191,39 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {},
+  flheader: {
+    // alignSelf: 'center',
+    position: 'relative',
+    top: 0,
+    margin: 10,
+    padding: 20,
+  },
+  flFooter: {
+    alignSelf: 'center',
+    position: 'fixed',
+    bottom: 0,
+    margin: 10,
+    marginBottom: 50,
+    flexDirection: 'row',
+  },
+  flContainer: {},
+  itemsContainer: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderRadius: 15,
+    borderColor: 'blue',
+    margin: 10,
+    padding: 20,
+  },
+  item: {
+    flex: 8,
+  },
+  divider: {
+    margin: 10,
+  },
+  row: { flexDirection: 'row' },
+  delBtn: {
+    flex: 2,
+    alignItems: 'flex-end',
+  },
 });

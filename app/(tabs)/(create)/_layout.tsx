@@ -1,6 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import { Platform, Pressable, useColorScheme } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function TabLayout() {
   return (
@@ -11,15 +12,13 @@ export default function TabLayout() {
           title: 'Submit',
           tabBarHideOnKeyboard: true,
           headerRight: () => (
-            <Link
-              href={Platform.OS === 'android' ? '/signin' : '/websignin'}
-              asChild
-            >
+            <Link href={'/(tabs)/'} asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
+                  <MaterialCommunityIcons
+                    name="home"
+                    size={24}
+                    color="black"
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                   />
                 )}

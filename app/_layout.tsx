@@ -11,6 +11,7 @@ import { useColorScheme } from 'react-native';
 import { Provider, useDispatch } from 'react-redux';
 import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DataProps } from '../data/DataProps';
 
 const initialState = {
   data: {

@@ -1,6 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import { Platform, Pressable, useColorScheme } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Colors from '../../constants/Colors';
 
@@ -16,6 +17,9 @@ export default function TabLayout() {
           //   display: 'none',
           // },
           title: 'Budget Plans',
+          tabBarStyle: {
+            display: 'none',
+          },
           headerRight: () => (
             <Link
               href={Platform.OS === 'android' ? '/signin' : '/websignin'}
@@ -23,11 +27,17 @@ export default function TabLayout() {
             >
               <Pressable>
                 {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
+                  <MaterialCommunityIcons
+                    name="account-circle"
+                    size={24}
+                    color="black"
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                   />
+                  // <FontAwesome
+                  //   name="info-circle"
+                  //   size={25}
+                  //   style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  // />
                 )}
               </Pressable>
             </Link>
