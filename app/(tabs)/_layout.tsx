@@ -49,7 +49,6 @@ export default function TabLayout() {
         options={{
           title: 'Info',
           tabBarHideOnKeyboard: true,
-          headerShown: false,
         }}
       />
 
