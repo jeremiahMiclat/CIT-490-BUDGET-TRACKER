@@ -125,6 +125,7 @@ export default function CreatePlan() {
       );
       dispatch(counterSlice.actions.updateFormSubmitted(true));
       reset();
+      setTargetDateVal(initialTargetDateVal);
       // Restart.Restart();
       // navRouter.replace('/(tabs)/');
 
@@ -183,7 +184,10 @@ export default function CreatePlan() {
                 render={() => <></>}
               />
               <Pressable onPress={() => setShowTDPicker(!showTDPicker)}>
-                <Text>{dayjs(targetDateVal).format('MMMM DD, YYYY')}</Text>
+                <Text>
+                  {'Target date:        ' +
+                    dayjs(targetDateVal).format('MMMM DD, YYYY')}
+                </Text>
               </Pressable>
               {showTDPicker && (
                 <Controller
@@ -204,7 +208,9 @@ export default function CreatePlan() {
                   name="targetDate"
                 />
               )}
-              {errors.targetDate && <Text>This is required.</Text>}
+              {errors.targetDate && (
+                <Text style={styles.required}>This is required.</Text>
+              )}
             </View>
             {/* PLAN NAME*/}
             <View style={styles.scrollViewItems}>
@@ -224,16 +230,20 @@ export default function CreatePlan() {
                 name="planName"
               />
 
-              {errors.planName && <Text>This is required.</Text>}
+              {errors.planName && (
+                <Text style={styles.required}>This is required.</Text>
+              )}
             </View>
 
             {/* DESCRIPTION*/}
             <View style={styles.scrollViewItems}>
               <Controller
                 control={control}
-                rules={{
-                  required: true,
-                }}
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     placeholder="Description"
@@ -267,7 +277,9 @@ export default function CreatePlan() {
                 name="initialBudget"
               />
 
-              {errors.initialBudget && <Text>This is required.</Text>}
+              {errors.initialBudget && (
+                <Text style={styles.required}>This is required.</Text>
+              )}
             </View>
           </View>
           <Pressable style={styles.submitBtn} onPress={handleSubmit(onSubmit)}>
@@ -305,5 +317,8 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     alignSelf: 'center',
     fontSize: 20,
+  },
+  required: {
+    color: 'red',
   },
 });
