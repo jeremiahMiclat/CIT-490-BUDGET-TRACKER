@@ -1,5 +1,6 @@
 import {
   Keyboard,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -228,8 +229,9 @@ export default function BudgetPlanScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableWithoutFeedback onPress={handleScreenPress}>
-        <View style={styles.container}>
+      {/* <TouchableWithoutFeedback onPress={handleScreenPress}> */}
+      <ScrollView>
+        <Pressable style={styles.container} onPress={handleScreenPress}>
           <View style={styles.itemContainer}>
             <Text style={styles.item}>Plan Name</Text>
             {planNameOnEdit != true ? (
@@ -364,8 +366,9 @@ export default function BudgetPlanScreen() {
               </View>
             )}
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        </Pressable>
+      </ScrollView>
+      {/* </TouchableWithoutFeedback> */}
     </SafeAreaView>
   );
 }
