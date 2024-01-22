@@ -77,6 +77,12 @@ export default function TabLayout() {
           title: 'Scheduled Funds',
         }}
       />
+      <Tabs.Screen
+        name="debts"
+        options={{
+          title: 'Debts',
+        }}
+      />
     </Tabs>
   );
 }
