@@ -20,7 +20,25 @@ import { useIsFocused } from '@react-navigation/native';
 import DateTimePicker from 'react-native-ui-datepicker';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+type RootStackParamList = {
+  Home: undefined;
+  debtlogs: undefined;
+};
+type CreateScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'debtlogs'
+>;
+
 export default function DebtsScreen() {
+  const navigator = useNavigation<CreateScreenNavigationProp>();
+  const dispatch = useDispatch();
+  const handleNavToLogs = () => {
+    navigator.navigate('debtlogs' as any);
+  };
+
   const itemOnView = useSelector((state: RootState) => state.viewing);
   const data = (itemOnView as any).debtInfo;
 
@@ -35,6 +53,8 @@ export default function DebtsScreen() {
   const toggleSaveLogs = (index: number) => {
     // saving implementaion
   };
+
+  useEffect(() => {}, [itemOnView]);
 
   const renderItem = (item: any) => {
     return (
@@ -74,9 +94,21 @@ export default function DebtsScreen() {
         {showLogs[item.index] && (
           <View>
             <Text>Add logs</Text>
-            <Pressable>
+            <Pressable
+              onPress={() => {
+                handleNavToLogs();
+                dispatch(
+                  counterSlice.actions.upDateDataOnEdit({
+                    onView: itemOnView,
+                    debtInfo: item.item,
+                    index: item.index,
+                  })
+                );
+              }}
+            >
               <FontAwesome name="check-circle" size={24} color="black" />
             </Pressable>
+            <Text>{JSON.stringify(item.item) + ''}</Text>
           </View>
         )}
       </View>
@@ -90,7 +122,7 @@ export default function DebtsScreen() {
           // style={styles.flContainer}
           // ListHeaderComponent={renderHeader}
           // ListFooterComponent={renderFLFooter}
-          data={data}
+          data={(itemOnView as any).debtInfo}
           renderItem={renderItem}
           keyExtractor={(item: any, index: any) => index}
         />

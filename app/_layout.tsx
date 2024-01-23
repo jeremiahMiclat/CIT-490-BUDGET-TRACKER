@@ -24,12 +24,13 @@ const initialState = {
     id: null,
     existingData: [{ fieldName: 'no data' }],
   },
-  formData: { data: {}, debtInfo: {} },
-  formDebtInfo: {},
+  formData: { data: {}, debtInfo: { description: 'no data' } },
+  formDebtInfo: { debtInfo: [{ description: 'no data', debtlogs: [] }] },
   formSchedFunds: {},
   formBillsInfo: {},
   formDailyBudget: {},
   formSubmitted: false,
+  dataOnEdit: undefined,
 };
 
 export const counterSlice = createSlice({
@@ -62,6 +63,9 @@ export const counterSlice = createSlice({
     },
     updateFormSubmitted: (state, action) => {
       state.formSubmitted = action.payload;
+    },
+    upDateDataOnEdit: (state, action) => {
+      state.dataOnEdit = action.payload;
     },
   },
 });

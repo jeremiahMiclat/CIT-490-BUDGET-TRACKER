@@ -94,6 +94,7 @@ export default function HomeScreen() {
   );
 
   useEffect(() => {
+    // console.log('data modified', data.value[0].debtInfo);
     try {
       if (
         Platform.OS === 'android' &&
