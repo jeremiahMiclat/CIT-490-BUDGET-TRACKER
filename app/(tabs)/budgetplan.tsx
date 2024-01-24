@@ -154,11 +154,12 @@ export default function BudgetPlanScreen() {
   const [editedTargetDate, setEditedTargetDate] = useState(
     (itemOnView as ItemType).targetDate
   );
-  const handleSaveTargetDate = () => {
+  const handleSaveTargetDate = (date: any) => {
+    setEditedTargetDate(date);
     const currData = appData;
     const updatedItemOnView = {
       ...itemOnView,
-      targetDate: editedTargetDate,
+      targetDate: date,
     };
 
     const indexToUpdate = currData.value.findIndex(
@@ -178,16 +179,19 @@ export default function BudgetPlanScreen() {
       dispatch(
         counterSlice.actions.updateViewing((updatedValue as any)[indexToUpdate])
       );
-
-      setTargetDateOnEdit(false);
     } else {
       console.error('save error');
     }
   };
 
-  useEffect(() => {
-    handleSaveTargetDate();
-  }, [editedTargetDate]);
+  const saveTargetDate = (date: any) => {
+    const targetDate = editedTargetDate;
+    console.log('in save', date);
+  };
+
+  // useEffect(() => {
+  //   handleSaveTargetDate();
+  // }, [editedTargetDate]);
 
   // edits code ends
   const handleScreenPress = () => {
@@ -339,33 +343,31 @@ export default function BudgetPlanScreen() {
           </View>
           <View style={styles.itemContainer}>
             <Text style={styles.item}>Target Date</Text>
-
-            {targetDateOnEdit ? (
-              <DateTimePicker
-                value={editedTargetDate}
-                onValueChange={(date: any) => {
-                  setEditedTargetDate(date);
-                  setTargetDateOnEdit(false);
-                }}
-                mode="date"
-              />
-            ) : (
-              <View style={[styles.row, styles.item]}>
-                <Text style={styles.item}>
-                  {dayjs(targetDate).format('MMMM DD, YYYY')}
-                </Text>
-                <Feather
-                  name="edit"
-                  size={24}
-                  color="black"
-                  onPress={() => {
-                    setTargetDateOnEdit(true);
-                    // setEditedTargetDate(dayjs(targetDate));
-                  }}
-                />
-              </View>
-            )}
+            <View style={[styles.row, styles.item]}>
+              <Text style={styles.item}>
+                {dayjs(editedTargetDate).format('MMMM DD, YYYY')}
+              </Text>
+            </View>
+            <Feather
+              name="edit"
+              size={24}
+              color="black"
+              onPress={() => {
+                setTargetDateOnEdit(!targetDateOnEdit);
+                // setEditedTargetDate(dayjs(targetDate));
+              }}
+            />
           </View>
+          {targetDateOnEdit && (
+            <DateTimePicker
+              value={editedTargetDate}
+              onValueChange={(date: any) => {
+                handleSaveTargetDate(date);
+                setTargetDateOnEdit(false);
+              }}
+              mode="date"
+            />
+          )}
         </Pressable>
       </ScrollView>
       {/* </TouchableWithoutFeedback> */}

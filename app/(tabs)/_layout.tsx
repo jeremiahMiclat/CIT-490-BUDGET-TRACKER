@@ -83,16 +83,6 @@ export default function TabLayout() {
           title: 'Debts',
         }}
       />
-      <Tabs.Screen
-        name="debtlogs"
-        options={{
-          title: 'Debt logs',
-          href: null,
-          tabBarStyle: {
-            display: 'none',
-          },
-        }}
-      />
     </Tabs>
   );
 }

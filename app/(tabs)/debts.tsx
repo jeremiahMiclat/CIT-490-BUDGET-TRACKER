@@ -22,6 +22,8 @@ import { Entypo } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Ionicons } from '@expo/vector-icons';
+import { Link } from 'expo-router';
 
 type RootStackParamList = {
   Home: undefined;
@@ -94,20 +96,21 @@ export default function DebtsScreen() {
         {showLogs[item.index] && (
           <View>
             <Text>Add logs</Text>
-            <Pressable
-              onPress={() => {
-                handleNavToLogs();
-                dispatch(
-                  counterSlice.actions.upDateDataOnEdit({
-                    onView: itemOnView,
-                    debtInfo: item.item,
-                    index: item.index,
-                  })
-                );
-              }}
-            >
-              <FontAwesome name="check-circle" size={24} color="black" />
-            </Pressable>
+            <Link href={'/debtlogs'} asChild>
+              <Pressable
+                onPress={() => {
+                  dispatch(
+                    counterSlice.actions.upDateDataOnEdit({
+                      onView: itemOnView,
+                      debtInfo: item.item,
+                      index: item.index,
+                    })
+                  );
+                }}
+              >
+                <FontAwesome name="check-circle" size={24} color="black" />
+              </Pressable>
+            </Link>
             <Text>{JSON.stringify(item.item) + ''}</Text>
           </View>
         )}
@@ -127,6 +130,13 @@ export default function DebtsScreen() {
           keyExtractor={(item: any, index: any) => index}
         />
       </View>
+      <View style={styles.addBtn}>
+        <Link href={'/adddebtinfo'} asChild>
+          <Pressable>
+            <Ionicons name="add-circle" size={40} color="black" />
+          </Pressable>
+        </Link>
+      </View>
     </SafeAreaView>
   );
 }
@@ -144,4 +154,9 @@ const styles = StyleSheet.create({
   },
   itemTitle: {},
   itemText: {},
+  addBtn: {
+    alignSelf: 'center',
+    padding: 10,
+    margin: 10,
+  },
 });

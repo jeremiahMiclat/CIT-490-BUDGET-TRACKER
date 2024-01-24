@@ -55,9 +55,6 @@ export default function CreatePlan() {
   const [showTDPicker, setShowTDPicker] = useState(false);
   const initialTargetDateVal = dayjs().add(30, 'day');
   const [targetDateVal, setTargetDateVal] = useState(initialTargetDateVal);
-  const saveData = async (data: string) => {
-    await AsyncStorage.setItem('btData', data);
-  };
   const navigator = useNavigation<CreateScreenNavigationProp>();
   const navRouter = useRouter();
   const {
@@ -68,15 +65,6 @@ export default function CreatePlan() {
     getValues,
     formState: { errors },
   } = useForm();
-
-  useEffect(() => {
-    try {
-      console.log(stateData);
-      saveData(JSON.stringify(stateData));
-    } catch (error) {
-      console.log(error);
-    }
-  }, [stateData]);
 
   useEffect(() => {
     if (showTDPicker) {

@@ -17,7 +17,7 @@ import { useForm, Controller } from 'react-hook-form';
 import DateTimePicker from 'react-native-ui-datepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { RootState, counterSlice } from '../_layout';
+import { RootState, counterSlice } from './_layout';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -47,6 +47,9 @@ export default function AddDebtLogScreen() {
   } = useForm();
   const [showDTPicker, setShowDTPicker] = useState(false);
   const [date, setDate] = useState(dayjs());
+  const dataIdentifier = useSelector(
+    (state: RootState) => state.data.identifier
+  );
   const dataList = useSelector((state: RootState) => state.data.value);
   const itemOnView = useSelector((state: RootState) => state.viewing);
   const dataOnEdit = useSelector((state: RootState) => state.dataOnEdit);
@@ -58,7 +61,7 @@ export default function AddDebtLogScreen() {
     (itemOnView as any).debtInfo
   );
   const dispatch = useDispatch();
-  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const navigator = useNavigation<CreateScreenNavigationProp>();
   const handleNavToLogs = () => {
     navigator.navigate('debts' as any);
@@ -66,85 +69,104 @@ export default function AddDebtLogScreen() {
 
   const appData = useSelector((state: RootState) => state.data);
   const [appDataValue, setAppDataValue] = useState(appData.value as any);
-  const replaceObjectAtIndex2 = (index: any, newObject: any) => {
-    setAppDataValue((prevList: any) => {
-      // Create a new array with the replaced object
-      const newList = [...prevList];
-      newList[index] = newObject;
-      return newList;
-    });
-  };
 
-  const replaceObjectAtIndex = (index: any, newObject: any) => {
-    setUpdatedInfo((prevList: any) => {
-      // Create a new array with the replaced object
-      const newList = [...prevList];
-      newList[index] = newObject;
-      return newList;
-    });
-  };
+  // const replaceObjectAtIndex2 = (index: any, newObject: any) => {
+  //   setAppDataValue((prevList: any) => {
+  //     // Create a new array with the replaced object
+  //     const newList = [...prevList];
+  //     newList[index] = newObject;
+  //     return newList;
+  //   });
+  // };
 
-  useEffect(() => {
-    setUpdatedItem({
-      ...updatedItem,
-      debtlogs: debtlogs,
-    });
+  // const replaceObjectAtIndex = (index: any, newObject: any) => {
+  //   setUpdatedInfo((prevList: any) => {
+  //     // Create a new array with the replaced object
+  //     const newList = [...prevList];
+  //     newList[index] = newObject;
+  //     return newList;
+  //   });
+  // };
 
-    reset();
-    handleNavToLogs();
-  }, [debtlogs]);
+  // useEffect(() => {
+  //   setUpdatedItem({
+  //     ...updatedItem,
+  //     debtlogs: debtlogs,
+  //   });
 
-  useEffect(() => {
-    replaceObjectAtIndex((dataOnEdit as any).index, updatedItem);
-  }, [updatedItem]);
+  //   reset();
+  //   handleNavToLogs();
+  // }, [debtlogs]);
 
-  useEffect(() => {
-    dispatch(
-      counterSlice.actions.updateViewing({
-        ...itemOnView,
-        debtInfo: updatedDebtInfo,
-      })
-    );
-  }, [updatedDebtInfo]);
+  // useEffect(() => {
+  //   replaceObjectAtIndex((dataOnEdit as any).index, updatedItem);
+  // }, [updatedItem]);
 
-  useEffect(() => {
-    setIsSubmitted(true);
-  }, [itemOnView]);
+  // useEffect(() => {
+  //   dispatch(
+  //     counterSlice.actions.updateViewing({
+  //       ...itemOnView,
+  //       debtInfo: updatedDebtInfo,
+  //     })
+  //   );
+  // }, [updatedDebtInfo]);
 
-  useEffect(() => {
-    const index = (appData.value as []).findIndex(
-      (obj: any) => obj.dateAdded == (itemOnView as any).dateAdded
-    );
+  // useEffect(() => {
+  //   console.log('debtlogs');
+  //   setIsSubmitted(true);
+  // }, [itemOnView]);
 
-    replaceObjectAtIndex2(index, itemOnView);
-    setIsSubmitted(false);
-  }, [isSubmitted]);
+  // useEffect(() => {
+  //   const index = (appData.value as []).findIndex(
+  //     (obj: any) => obj.dateAdded == (itemOnView as any).dateAdded
+  //   );
 
-  useEffect(() => {
-    dispatch(
-      counterSlice.actions.updateData({
-        data: appData.identifier,
-        value: appDataValue,
-      })
-    );
-  }, [appDataValue]);
+  //   replaceObjectAtIndex2(index, itemOnView);
+  //   setIsSubmitted(false);
+  // }, [isSubmitted]);
+
+  // useEffect(() => {
+  //   dispatch(
+  //     counterSlice.actions.updateData({
+  //       data: appData.identifier,
+  //       value: appDataValue,
+  //     })
+  //   );
+  // }, [appDataValue]);
 
   const onSubmit = (data: any) => {
-    try {
-      const day = dayjs().format('MMMM D, YYYY h:mm:ss A');
-      const inputDate = dayjs(date);
-      const dateString = date.toString();
+    const debtInfoItems = (itemOnView as any).debtInfo;
+    const debtInfoIndex = (dataOnEdit as any).index;
+    const debtInfoItemOnEdit = (dataOnEdit as any).debtInfo;
 
-      setValue('date', dateString);
-      setValue('dateAdded', day);
+    const newDebtInfoOnEdit = {
+      ...debtInfoItemOnEdit,
+      debtlogs: [...debtInfoItemOnEdit.debtlogs, data],
+    };
 
-      const dataToAdd = getValues();
+    const newDebtInfoItems = [...debtInfoItems];
+    newDebtInfoItems[debtInfoIndex] = newDebtInfoOnEdit;
 
-      setdebtLogs([...debtlogs, dataToAdd]);
-    } catch (error) {
-      console.error('An error occurred:', error);
-      // Handle errors here
-    }
+    const newItemOnView = {
+      ...itemOnView,
+      debtInfo: newDebtInfoItems,
+    };
+
+    dispatch(counterSlice.actions.updateViewing({ ...newItemOnView }));
+
+    const itemOnViewIndex = (dataList as []).findIndex(
+      (obj: any) => obj.dateAdded === (itemOnView as any).dateAdded
+    );
+    const newDataList = [...dataList];
+
+    (newDataList as any)[itemOnViewIndex] = newItemOnView;
+    console.log(newDataList);
+    dispatch(
+      counterSlice.actions.updateData({
+        identifier: dataIdentifier,
+        value: newDataList,
+      })
+    );
   };
   return (
     <SafeAreaView>
@@ -200,10 +222,17 @@ export default function AddDebtLogScreen() {
             />
           )}
         </View>
-
-        <Pressable onPress={handleSubmit(onSubmit)}>
-          <Text>Submit</Text>
-        </Pressable>
+        <Link href={'/(tabs)/debts'} asChild>
+          <Pressable
+            onPress={() => {
+              setValue('date', date.toString());
+              setValue('dateAdded', dayjs().toString());
+              handleSubmit(onSubmit)();
+            }}
+          >
+            <Text>Submit</Text>
+          </Pressable>
+        </Link>
       </ScrollView>
     </SafeAreaView>
   );
