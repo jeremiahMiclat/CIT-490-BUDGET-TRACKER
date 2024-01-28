@@ -24,12 +24,13 @@ const initialState = {
     id: null,
     existingData: [{ fieldName: 'no data' }],
   },
-  formData: { data: {}, debtInfo: {} },
-  formDebtInfo: {},
+  formData: { data: {}, debtInfo: { description: 'no data' } },
+  formDebtInfo: { debtInfo: [{ description: 'no data', debtlogs: [] }] },
   formSchedFunds: {},
   formBillsInfo: {},
   formDailyBudget: {},
   formSubmitted: false,
+  dataOnEdit: undefined,
 };
 
 export const counterSlice = createSlice({
@@ -62,6 +63,9 @@ export const counterSlice = createSlice({
     },
     updateFormSubmitted: (state, action) => {
       state.formSubmitted = action.payload;
+    },
+    upDateDataOnEdit: (state, action) => {
+      state.dataOnEdit = action.payload;
     },
   },
 });
@@ -116,6 +120,8 @@ function RootLayoutNav() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="signin" options={{ presentation: 'modal' }} />
         <Stack.Screen name="websignin" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="adddebtinfo" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="debtlogs" options={{ presentation: 'modal' }} />
       </Stack>
     </Provider>
   );

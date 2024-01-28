@@ -179,7 +179,9 @@ export default function DebtInfoScreen() {
         <TouchableWithoutFeedback onPress={handlePressOnScreen}>
           <View>
             <Pressable
-              onPress={() => [append({ description: null, amount: null })]}
+              onPress={() => [
+                append({ description: null, amount: null, debtlogs: [] }),
+              ]}
               style={styles.addNewBtn}
             >
               <Text style={styles.addNewBtnText}>Add</Text>

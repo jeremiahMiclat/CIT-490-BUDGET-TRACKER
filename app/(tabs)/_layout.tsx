@@ -16,7 +16,7 @@ export default function TabLayout() {
           // tabBarStyle: {
           //   display: 'none',
           // },
-          title: 'Budget Plans',
+          title: 'Home',
           tabBarStyle: {
             display: 'none',
           },
@@ -45,6 +45,14 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="budgetplan"
+        options={{
+          title: 'Info',
+          tabBarHideOnKeyboard: true,
+        }}
+      />
+
+      <Tabs.Screen
         name="(create)"
         options={{
           title: 'Create',
@@ -67,6 +75,12 @@ export default function TabLayout() {
         name="scheduledfunds"
         options={{
           title: 'Scheduled Funds',
+        }}
+      />
+      <Tabs.Screen
+        name="debts"
+        options={{
+          title: 'Debts',
         }}
       />
     </Tabs>

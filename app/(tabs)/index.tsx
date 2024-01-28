@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { db } from '../../firebaseConfig';
@@ -67,6 +67,9 @@ export default function HomeScreen() {
       console.log(error);
     }
   };
+  const saveData = async (data: string) => {
+    await AsyncStorage.setItem('btData', data);
+  };
 
   const renderHeader = () => {
     return data.value.length < 1 ? (
@@ -94,6 +97,7 @@ export default function HomeScreen() {
   );
 
   useEffect(() => {
+    // console.log('data modified', data.value[0].debtInfo);
     try {
       if (
         Platform.OS === 'android' &&
@@ -102,6 +106,23 @@ export default function HomeScreen() {
       ) {
         uploadToFirestore(data, user);
       }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [data]);
+
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    // Skip the effect on the initial render
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+
+    try {
+      console.log('data is updated', data);
+      saveData(JSON.stringify(data));
     } catch (error) {
       console.log(error);
     }
@@ -117,7 +138,7 @@ export default function HomeScreen() {
         const localData = await AsyncStorage.getItem('btData');
         const localUser = await AsyncStorage.getItem('user');
         if (localData) {
-          console.log('local data is', localData);
+          // console.log('local data is', localData);
           dispatch(counterSlice.actions.updateData(JSON.parse(localData)));
         }
         if (localUser) {
