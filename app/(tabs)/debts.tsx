@@ -42,7 +42,7 @@ export default function DebtsScreen() {
   };
 
   const itemOnView = useSelector((state: RootState) => state.viewing);
-  const data = (itemOnView as any).debtInfo;
+  const logs = itemOnView;
 
   const [showLogs, setShowLogs] = useState<boolean[]>([]);
 
@@ -56,7 +56,19 @@ export default function DebtsScreen() {
     // saving implementaion
   };
 
-  useEffect(() => {}, [itemOnView]);
+  const renderLogs = (item: any) => {
+    return (
+      <View style={styles.logItemContainer}>
+        <Text style={styles.logItemText}>
+          {JSON.stringify(item.item.notes)}
+        </Text>
+        <Text style={styles.logItemText}>
+          {JSON.stringify(item.item.amountPaid)}
+        </Text>
+        <Text style={styles.logItemText}>{JSON.stringify(item.item.date)}</Text>
+      </View>
+    );
+  };
 
   const renderItem = (item: any) => {
     return (
@@ -95,8 +107,7 @@ export default function DebtsScreen() {
 
         {showLogs[item.index] && (
           <View>
-            <Text>Add logs</Text>
-            <Link href={'/debtlogs'} asChild>
+            <Link href={'/debtlogs'} asChild style={styles.addLogBtn}>
               <Pressable
                 onPress={() => {
                   dispatch(
@@ -108,10 +119,14 @@ export default function DebtsScreen() {
                   );
                 }}
               >
-                <FontAwesome name="check-circle" size={24} color="black" />
+                <Ionicons name="add-circle" size={24} color="black" />
               </Pressable>
             </Link>
-            <Text>{JSON.stringify(item.item) + ''}</Text>
+            <FlatList
+              data={item.item.debtlogs}
+              renderItem={renderLogs}
+              keyExtractor={(item: any, index: any) => index}
+            />
           </View>
         )}
       </View>
@@ -156,6 +171,23 @@ const styles = StyleSheet.create({
   itemText: {},
   addBtn: {
     alignSelf: 'center',
+    padding: 10,
+    margin: 10,
+  },
+  addLogBtn: {
+    alignSelf: 'center',
+  },
+  logItemContainer: {
+    padding: 10,
+    margin: 10,
+    borderColor: 'pink',
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  logItemText: {
+    borderColor: 'pink',
+    borderWidth: 1,
+    borderRadius: 10,
     padding: 10,
     margin: 10,
   },

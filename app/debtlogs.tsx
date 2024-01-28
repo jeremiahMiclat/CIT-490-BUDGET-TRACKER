@@ -26,7 +26,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Link, useRouter } from 'expo-router';
 import Restart from 'react-native-restart';
 import { router } from 'expo-router';
-
+import { AntDesign } from '@expo/vector-icons';
 type RootStackParamList = {
   Home: undefined;
   debts: undefined;
@@ -171,33 +171,37 @@ export default function AddDebtLogScreen() {
   return (
     <SafeAreaView>
       <ScrollView>
-        <Controller
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              placeholder="Notes"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="notes"
-        />
-        <Controller
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              placeholder="Amount Paid"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              keyboardType={'number-pad'}
-            />
-          )}
-          name="amountPaid"
-        />
+        <View style={styles.controllerContainer}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Notes"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="notes"
+          />
+        </View>
+        <View style={styles.controllerContainer}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Amount Paid"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                keyboardType={'number-pad'}
+              />
+            )}
+            name="amountPaid"
+          />
+        </View>
 
-        <View>
+        <View style={styles.controllerContainer}>
           <Controller control={control} name="date" render={() => <></>} />
           <Pressable onPress={() => setShowDTPicker(!showDTPicker)}>
             <Text>{'Date:        ' + dayjs(date).format('MMMM DD, YYYY')}</Text>
@@ -222,7 +226,7 @@ export default function AddDebtLogScreen() {
             />
           )}
         </View>
-        <Link href={'/(tabs)/debts'} asChild>
+        <Link href={'/(tabs)/debts'} asChild style={styles.subtmitBtn}>
           <Pressable
             onPress={() => {
               setValue('date', date.toString());
@@ -230,10 +234,28 @@ export default function AddDebtLogScreen() {
               handleSubmit(onSubmit)();
             }}
           >
-            <Text>Submit</Text>
+            <AntDesign name="checkcircle" size={50} color="green" />
           </Pressable>
         </Link>
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  controllerContainer: {
+    borderColor: 'blue',
+    borderRadius: 10,
+    borderWidth: 1,
+    padding: 10,
+    margin: 10,
+  },
+  subtmitBtn: {
+    alignSelf: 'center',
+    padding: 10,
+    margin: 50,
+  },
+});
