@@ -1,5 +1,6 @@
 import {
   FlatList,
+  GestureResponderEvent,
   Keyboard,
   Pressable,
   ScrollView,
@@ -24,6 +25,7 @@ import { useNavigation, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
+import { MaterialIcons } from '@expo/vector-icons';
 
 type RootStackParamList = {
   Home: undefined;
@@ -40,7 +42,10 @@ export default function DebtsScreen() {
   const handleNavToLogs = () => {
     navigator.navigate('debtlogs' as any);
   };
-
+  const dataList = useSelector((state: RootState) => state.data.value);
+  const dataIdentifier = useSelector(
+    (state: RootState) => state.data.identifier
+  );
   const itemOnView = useSelector((state: RootState) => state.viewing);
   const logs = itemOnView;
 
@@ -70,9 +75,30 @@ export default function DebtsScreen() {
     );
   };
 
+  const handleDeleteDebtInfo = (item: any) => {
+    const updatedDebtInfo = [...(itemOnView as any).debtInfo];
+    updatedDebtInfo.splice(item.index, 1);
+    const updatedItemOnView = {
+      ...itemOnView,
+      debtInfo: updatedDebtInfo,
+    };
+    const itemOnViewIndex = (dataList as []).findIndex(
+      (obj: any) => obj.dateAdded === (itemOnView as any).dateAdded
+    );
+    const upDatedDataList = [...dataList];
+    (upDatedDataList as any)[itemOnViewIndex] = updatedItemOnView;
+    dispatch(counterSlice.actions.updateViewing({ ...updatedItemOnView }));
+    dispatch(
+      counterSlice.actions.updateData({
+        identifier: dataIdentifier,
+        value: upDatedDataList,
+      })
+    );
+  };
+
   const renderItem = (item: any) => {
     return (
-      <View style={styles.container}>
+      <View style={styles.flatListContainer}>
         <View style={[styles.row, styles.itemContainer]}>
           <Text>Description: </Text>
           <Text>{item.item.description + ''}</Text>
@@ -129,6 +155,13 @@ export default function DebtsScreen() {
             />
           </View>
         )}
+
+        <Pressable
+          style={styles.delDebtInfo}
+          onPress={(event: GestureResponderEvent) => handleDeleteDebtInfo(item)}
+        >
+          <MaterialIcons name="delete" size={24} color="blue" />
+        </Pressable>
       </View>
     );
   };
@@ -166,6 +199,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderColor: 'blue',
+    borderRadius: 10,
   },
   itemTitle: {},
   itemText: {},
@@ -190,5 +224,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     margin: 10,
+  },
+  flatListContainer: {
+    borderColor: 'blue',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+  },
+  delDebtInfo: {
+    alignSelf: 'center',
+    padding: 10,
   },
 });
