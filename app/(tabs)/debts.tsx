@@ -61,16 +61,36 @@ export default function DebtsScreen() {
     // saving implementaion
   };
 
-  const renderLogs = (item: any) => {
+  const renderLogs = (
+    item: any,
+    debtInfo: any
+    // index: any
+  ) => {
     return (
       <View style={styles.logItemContainer}>
         <Text style={styles.logItemText}>
-          {JSON.stringify(item.item.notes)}
+          {item.item.notes != undefined
+            ? JSON.stringify(item.item.notes)
+            : 'not set'}
         </Text>
         <Text style={styles.logItemText}>
-          {JSON.stringify(item.item.amountPaid)}
+          {item.item.amountPaid != undefined
+            ? JSON.stringify(item.item.amountPaid)
+            : 'not set'}
         </Text>
-        <Text style={styles.logItemText}>{JSON.stringify(item.item.date)}</Text>
+        <Text style={styles.logItemText}>
+          {item.item.date != undefined
+            ? JSON.stringify(item.item.date)
+            : 'not set'}
+        </Text>
+        <Pressable
+          onPress={(event: GestureResponderEvent) =>
+            handleDeleteLog(item, debtInfo)
+          }
+          style={styles.delLogBtn}
+        >
+          <MaterialIcons name="delete" size={24} color="pink" />
+        </Pressable>
       </View>
     );
   };
@@ -87,6 +107,53 @@ export default function DebtsScreen() {
     );
     const upDatedDataList = [...dataList];
     (upDatedDataList as any)[itemOnViewIndex] = updatedItemOnView;
+    dispatch(counterSlice.actions.updateViewing({ ...updatedItemOnView }));
+    dispatch(
+      counterSlice.actions.updateData({
+        identifier: dataIdentifier,
+        value: upDatedDataList,
+      })
+    );
+  };
+
+  const handleDeleteLog = (item: any, debtInfo: any) => {
+    const debtInfoIndex = debtInfo.index;
+    const logIndex = item.index;
+    // console.log('log index', logIndex);
+    // console.log('debtInfo index', debtInfoIndex);
+    // console.log('log', item);
+    // console.log('debtInfo', debtInfo);
+    // console.log('Item on View', itemOnView);
+
+    const updatedDebtLogs = [...debtInfo.item.debtlogs];
+    // console.log('Current', updatedDebtLogs);
+    updatedDebtLogs.splice(logIndex, 1);
+    // console.log('Updated', updatedDebtLogs);
+
+    // console.log('Current', debtInfo.item);
+
+    const updatedDebtInfoItem = {
+      ...debtInfo.item,
+      debtlogs: updatedDebtLogs,
+    };
+    // console.log('Updated', updatedDebtInfoItem);
+
+    // console.log('c', (itemOnView as any).debtInfo);
+    const updatedDebtInfo = [...(itemOnView as any).debtInfo];
+    // console.log('Current dI', updatedDebtInfo);
+    updatedDebtInfo[debtInfoIndex] = updatedDebtInfoItem;
+    // console.log('Updated dI', updatedDebtInfo);
+    const updatedItemOnView = {
+      ...itemOnView,
+      debtInfo: updatedDebtInfo,
+    };
+    // console.log('u', updatedItemOnView.debtInfo);
+    const itemOnViewIndex = (dataList as []).findIndex(
+      (obj: any) => obj.dateAdded === (itemOnView as any).dateAdded
+    );
+    const upDatedDataList = [...dataList];
+    (upDatedDataList as any)[itemOnViewIndex] = updatedItemOnView;
+
     dispatch(counterSlice.actions.updateViewing({ ...updatedItemOnView }));
     dispatch(
       counterSlice.actions.updateData({
@@ -148,11 +215,17 @@ export default function DebtsScreen() {
                 <Ionicons name="add-circle" size={24} color="black" />
               </Pressable>
             </Link>
-            <FlatList
-              data={item.item.debtlogs}
-              renderItem={renderLogs}
-              keyExtractor={(item: any, index: any) => index}
-            />
+            {item.item.debtlogs.length > 0 ? (
+              <FlatList
+                data={item.item.debtlogs}
+                renderItem={logItem => renderLogs(logItem, item)}
+                keyExtractor={(logItem: any, logIndex: any) => logIndex}
+              />
+            ) : (
+              <View style={styles.logItemContainer}>
+                <Text style={styles.logItemText}>No logs</Text>
+              </View>
+            )}
           </View>
         )}
 
@@ -233,6 +306,10 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   delDebtInfo: {
+    alignSelf: 'center',
+    padding: 10,
+  },
+  delLogBtn: {
     alignSelf: 'center',
     padding: 10,
   },

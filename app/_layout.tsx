@@ -120,8 +120,14 @@ function RootLayoutNav() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="signin" options={{ presentation: 'modal' }} />
         <Stack.Screen name="websignin" options={{ presentation: 'modal' }} />
-        <Stack.Screen name="adddebtinfo" options={{ presentation: 'modal' }} />
-        <Stack.Screen name="debtlogs" options={{ presentation: 'modal' }} />
+        <Stack.Screen
+          name="adddebtinfo"
+          options={{ presentation: 'modal', title: 'Add Debt Information' }}
+        />
+        <Stack.Screen
+          name="debtlogs"
+          options={{ presentation: 'modal', title: 'Add Logs' }}
+        />
       </Stack>
     </Provider>
   );
