@@ -234,8 +234,8 @@ export default function BudgetPlanScreen() {
   return (
     <SafeAreaView style={styles.container}>
       {/* <TouchableWithoutFeedback onPress={handleScreenPress}> */}
-      <ScrollView>
-        <Pressable style={styles.container} onPress={handleScreenPress}>
+      <Pressable style={styles.container} onPress={() => handleScreenPress()}>
+        <ScrollView>
           <View style={styles.itemContainer}>
             <Text style={styles.item}>Plan Name</Text>
             {planNameOnEdit != true ? (
@@ -368,8 +368,9 @@ export default function BudgetPlanScreen() {
               mode="date"
             />
           )}
-        </Pressable>
-      </ScrollView>
+        </ScrollView>
+      </Pressable>
+
       {/* </TouchableWithoutFeedback> */}
     </SafeAreaView>
   );
