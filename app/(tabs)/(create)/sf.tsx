@@ -179,7 +179,9 @@ export default function ScheduledFundsCreateScreen() {
         <TouchableWithoutFeedback onPress={handlePressOnScreen}>
           <View>
             <Pressable
-              onPress={() => [append({ description: null, amount: null })]}
+              onPress={() => [
+                append({ description: null, amount: null, sfLogs: [] }),
+              ]}
               style={styles.addNewBtn}
             >
               <Text style={styles.addNewBtnText}>Add</Text>

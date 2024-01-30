@@ -26,7 +26,9 @@ const initialState = {
   },
   formData: { data: {}, debtInfo: { description: 'no data' } },
   formDebtInfo: { debtInfo: [{ description: 'no data', debtlogs: [] }] },
-  formSchedFunds: {},
+  formSchedFunds: {
+    scheduledFundsInfo: [{ description: 'no saved data', sfLogs: [] }],
+  },
   formBillsInfo: {},
   formDailyBudget: {},
   formSubmitted: false,
@@ -126,7 +128,18 @@ function RootLayoutNav() {
         />
         <Stack.Screen
           name="debtlogs"
-          options={{ presentation: 'modal', title: 'Add Logs' }}
+          options={{ presentation: 'modal', title: 'Add Debt Logs' }}
+        />
+        <Stack.Screen
+          name="addsfinfo"
+          options={{
+            presentation: 'modal',
+            title: 'Add Scheduled Funds Information',
+          }}
+        />
+        <Stack.Screen
+          name="sflogs"
+          options={{ presentation: 'modal', title: 'Add Scheduled Fund Logs' }}
         />
       </Stack>
     </Provider>

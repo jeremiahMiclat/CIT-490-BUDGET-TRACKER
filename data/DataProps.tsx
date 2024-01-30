@@ -9,6 +9,9 @@ export interface DataProps {
   initialBudget?: string;
   currentDebt?: string; // auto calculated
   totalDebtsToPay?: string; // auto calculated from bills and debts to pay,
+  currentBudget?: string; // auto calculated
+  futureBudget?: string; //auto calculated with the incoming
+  dailyBudgetLeft?: string; //auto calculated
   debtInfo?: {
     key: string;
     description: string;
@@ -17,7 +20,7 @@ export interface DataProps {
     dueDate: string;
     log: {
       key: string;
-      isPaid: Boolean;
+      amountPaid: string;
       datePaid: string;
     };
   }[];
@@ -29,7 +32,7 @@ export interface DataProps {
     dueDate: string;
     log: {
       key: string;
-      isPaid: Boolean;
+      amountPaid: string;
       datePaid: string;
     };
   }[];
@@ -50,7 +53,7 @@ export interface DataProps {
       date: string;
       log: {
         key: string;
-        isReceived: Boolean;
+        amountReceived: Boolean;
         dateReceived: string;
       };
     }[]
