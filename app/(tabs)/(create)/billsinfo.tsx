@@ -179,7 +179,9 @@ export default function BillsInfoScreen() {
         <TouchableWithoutFeedback onPress={handlePressOnScreen}>
           <View>
             <Pressable
-              onPress={() => [append({ description: null, amount: null })]}
+              onPress={() => [
+                append({ description: null, amount: null, billsLogs: [] }),
+              ]}
               style={styles.addNewBtn}
             >
               <Text style={styles.addNewBtnText}>Add</Text>
