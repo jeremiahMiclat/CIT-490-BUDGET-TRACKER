@@ -28,9 +28,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="dailybudget"
+        name="plannedbudgetinfo"
         options={{
-          title: 'Dailies',
+          title: 'Planned Budget',
           tabBarHideOnKeyboard: true,
         }}
       />

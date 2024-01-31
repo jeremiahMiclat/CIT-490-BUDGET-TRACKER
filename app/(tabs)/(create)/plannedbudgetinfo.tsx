@@ -66,7 +66,7 @@ export default function DebtInfoScreen() {
       return updatedValues;
     });
 
-    setValue(`dailyBudgetInfo[${index}].startDate`, date);
+    setValue(`plannedBudgetInfo[${index}].startDate`, date);
   };
 
   const [DdatePickerIndex, setDDatePickerIndex] = useState(null);
@@ -100,7 +100,7 @@ export default function DebtInfoScreen() {
       return updatedValues;
     });
 
-    setValue(`dailyBudgetInfo[${index}].endDate`, date);
+    setValue(`plannedBudgetInfo[${index}].endDate`, date);
   };
 
   const isFocused = useIsFocused();
@@ -138,7 +138,7 @@ export default function DebtInfoScreen() {
   } = useForm();
   let { fields, append, remove } = useFieldArray({
     control,
-    name: 'dailyBudgetInfo',
+    name: 'plannedBudgetInfo',
   });
   const watchedFields = watch();
   const onSubmit = (data: any) => {
@@ -163,7 +163,7 @@ export default function DebtInfoScreen() {
     } else {
       try {
         dispatch(counterSlice.actions.updateDailyBudgetForm(watch()));
-        reset({ dailyBudgetInfo: watch().dailyBudgetInfo });
+        reset({ plannedBudgetInfo: watch().plannedBudgetInfo });
       } catch (error) {
         console.log('useEffect error');
       }
@@ -179,7 +179,9 @@ export default function DebtInfoScreen() {
         <TouchableWithoutFeedback onPress={handlePressOnScreen}>
           <View>
             <Pressable
-              onPress={() => [append({ description: null, amount: null })]}
+              onPress={() => [
+                append({ description: null, amount: null, plannedLogs: [] }),
+              ]}
               style={styles.addNewBtn}
             >
               <Text style={styles.addNewBtnText}>Add</Text>
@@ -201,7 +203,7 @@ export default function DebtInfoScreen() {
                         value={value}
                       />
                     )}
-                    name={`dailyBudgetInfo[${index}].description`}
+                    name={`plannedBudgetInfo[${index}].description`}
                   />
                 </View>
 
@@ -217,7 +219,7 @@ export default function DebtInfoScreen() {
                         keyboardType={'number-pad'}
                       />
                     )}
-                    name={`dailyBudgetInfo[${index}].amount`}
+                    name={`plannedBudgetInfo[${index}].amount`}
                   />
                 </View>
 
@@ -240,7 +242,7 @@ export default function DebtInfoScreen() {
                         </Pressable>
                       </>
                     )}
-                    name={`dailyBudgetInfo[${index}].startDate`}
+                    name={`plannedBudgetInfo[${index}].startDate`}
                   />
                 </View>
 
@@ -271,7 +273,7 @@ export default function DebtInfoScreen() {
                         </Pressable>
                       </>
                     )}
-                    name={`dailyBudgetInfo[${index}].endDate`}
+                    name={`plannedBudgetInfo[${index}].endDate`}
                   />
                 </View>
 

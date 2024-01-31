@@ -30,7 +30,9 @@ const initialState = {
     scheduledFundsInfo: [{ description: 'no saved data', sfLogs: [] }],
   },
   formBillsInfo: {},
-  formDailyBudget: {},
+  formDailyBudget: {
+    plannedBudgetInfo: [{ description: 'no saved data', plannedLogs: [] }],
+  },
   formSubmitted: false,
   dataOnEdit: undefined,
 };
@@ -140,6 +142,18 @@ function RootLayoutNav() {
         <Stack.Screen
           name="sflogs"
           options={{ presentation: 'modal', title: 'Add Scheduled Fund Logs' }}
+        />
+        <Stack.Screen
+          name="addplannedinfo"
+          options={{
+            presentation: 'modal',
+            title: 'Add Planned Budget Information',
+          }}
+        />
+
+        <Stack.Screen
+          name="plannedlogs"
+          options={{ presentation: 'modal', title: 'Add Planned Budget Logs' }}
         />
       </Stack>
     </Provider>

@@ -27,21 +27,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 
-type RootStackParamList = {
-  Home: undefined;
-  debtlogs: undefined;
-};
-type CreateScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'debtlogs'
->;
-
 export default function SFScreen() {
-  const navigator = useNavigation<CreateScreenNavigationProp>();
   const dispatch = useDispatch();
-  const handleNavToLogs = () => {
-    navigator.navigate('debtlogs' as any);
-  };
   const dataList = useSelector((state: RootState) => state.data.value);
   const dataIdentifier = useSelector(
     (state: RootState) => state.data.identifier
@@ -63,7 +50,7 @@ export default function SFScreen() {
 
   const renderLogs = (
     item: any,
-    scheduledFundsInfo: any
+    plannedBudgetInfo: any
     // index: any
   ) => {
     return (
@@ -85,7 +72,7 @@ export default function SFScreen() {
         </Text>
         <Pressable
           onPress={(event: GestureResponderEvent) =>
-            handleDeleteLog(item, scheduledFundsInfo)
+            handleDeleteLog(item, plannedBudgetInfo)
           }
           style={styles.delLogBtn}
         >
@@ -95,14 +82,12 @@ export default function SFScreen() {
     );
   };
 
-  const handleDeleteSfInfo = (item: any) => {
-    const updatedScheduledFundsInfo = [
-      ...(itemOnView as any).scheduledFundsInfo,
-    ];
-    updatedScheduledFundsInfo.splice(item.index, 1);
+  const handleDeltePlannedInfo = (item: any) => {
+    const updatedPlannedBudgetInfo = [...(itemOnView as any).plannedBudgetInfo];
+    updatedPlannedBudgetInfo.splice(item.index, 1);
     const updatedItemOnView = {
       ...itemOnView,
-      scheduledFundsInfo: updatedScheduledFundsInfo,
+      plannedBudgetInfo: updatedPlannedBudgetInfo,
     };
     const itemOnViewIndex = (dataList as []).findIndex(
       (obj: any) => obj.dateAdded === (itemOnView as any).dateAdded
@@ -118,8 +103,8 @@ export default function SFScreen() {
     );
   };
 
-  const handleDeleteLog = (item: any, scheduledFundInfo: any) => {
-    const scheduledFundInfoIndex = scheduledFundInfo.index;
+  const handleDeleteLog = (item: any, plannedBudgetInfo: any) => {
+    const pBInfoIndex = plannedBudgetInfo.index;
     const logIndex = item.index;
     // console.log('log index', logIndex);
     // console.log('debtInfo index', debtInfoIndex);
@@ -127,27 +112,27 @@ export default function SFScreen() {
     // console.log('debtInfo', debtInfo);
     // console.log('Item on View', itemOnView);
 
-    const updatedSfLogs = [...scheduledFundInfo.item.sfLogs];
+    const updatedPBLogs = [...plannedBudgetInfo.item.plannedLogs];
     // console.log('Current', updatedDebtLogs);
-    updatedSfLogs.splice(logIndex, 1);
+    updatedPBLogs.splice(logIndex, 1);
     // console.log('Updated', updatedDebtLogs);
 
     // console.log('Current', debtInfo.item);
 
-    const updatedSfInfoItem = {
-      ...scheduledFundInfo.item,
-      sfLogs: updatedSfLogs,
+    const updatedPBInfoItem = {
+      ...plannedBudgetInfo.item,
+      plannedLogs: updatedPBLogs,
     };
     // console.log('Updated', updatedDebtInfoItem);
 
     // console.log('c', (itemOnView as any).debtInfo);
-    const updatedSfInfo = [...(itemOnView as any).debtInfo];
+    const updatedPBInfo = [...(itemOnView as any).plannedBudgetInfo];
     // console.log('Current dI', updatedDebtInfo);
-    updatedSfInfo[scheduledFundInfoIndex] = updatedSfInfoItem;
+    updatedPBInfo[pBInfoIndex] = updatedPBInfoItem;
     // console.log('Updated dI', updatedDebtInfo);
     const updatedItemOnView = {
       ...itemOnView,
-      scheduledFundsInfo: updatedSfInfo,
+      plannedBudgetInfo: updatedPBInfo,
     };
     // console.log('u', updatedItemOnView.debtInfo);
     const itemOnViewIndex = (dataList as []).findIndex(
@@ -179,14 +164,14 @@ export default function SFScreen() {
         </View>
 
         <View style={[styles.row, styles.itemContainer]}>
-          <Text>Date: </Text>
-          <Text>{dayjs(item.item.date).format('MMMM DD, YYYY') + ''}</Text>
+          <Text>Start Date: </Text>
+          <Text>{dayjs(item.item.startDate).format('MMMM DD, YYYY') + ''}</Text>
         </View>
 
-        {/* <View style={[styles.row, styles.itemContainer]}>
-          <Text>Due Date: </Text>
-          <Text>{dayjs(item.item.dueDate).format('MMMM DD, YYYY') + ''}</Text>
-        </View> */}
+        <View style={[styles.row, styles.itemContainer]}>
+          <Text>End Date: </Text>
+          <Text>{dayjs(item.item.endDate).format('MMMM DD, YYYY') + ''}</Text>
+        </View>
 
         <Pressable
           style={[styles.row, styles.itemContainer]}
@@ -200,13 +185,13 @@ export default function SFScreen() {
 
         {showLogs[item.index] && (
           <View>
-            <Link href={'/sflogs'} asChild style={styles.addLogBtn}>
+            <Link href={'/plannedlogs'} asChild style={styles.addLogBtn}>
               <Pressable
                 onPress={() => {
                   dispatch(
                     counterSlice.actions.upDateDataOnEdit({
                       onView: itemOnView,
-                      scheduledFundsInfo: item.item,
+                      plannedBudgetInfo: item.item,
                       index: item.index,
                     })
                   );
@@ -215,9 +200,9 @@ export default function SFScreen() {
                 <Ionicons name="add-circle" size={24} color="black" />
               </Pressable>
             </Link>
-            {item.item.sfLogs.length > 0 ? (
+            {item.item.plannedLogs.length > 0 ? (
               <FlatList
-                data={item.item.sfLogs}
+                data={item.item.plannedLogs}
                 renderItem={logItem => renderLogs(logItem, item)}
                 keyExtractor={(logItem: any, logIndex: any) => logIndex}
               />
@@ -231,7 +216,9 @@ export default function SFScreen() {
 
         <Pressable
           style={styles.delDebtInfo}
-          onPress={(event: GestureResponderEvent) => handleDeleteSfInfo(item)}
+          onPress={(event: GestureResponderEvent) =>
+            handleDeltePlannedInfo(item)
+          }
         >
           <MaterialIcons name="delete" size={24} color="blue" />
         </Pressable>
@@ -246,13 +233,13 @@ export default function SFScreen() {
           // style={styles.flContainer}
           // ListHeaderComponent={renderHeader}
           // ListFooterComponent={renderFLFooter}
-          data={(itemOnView as any).scheduledFundsInfo}
+          data={(itemOnView as any).plannedBudgetInfo}
           renderItem={renderItem}
           keyExtractor={(item: any, index: any) => index}
         />
       </View>
       <View style={styles.addBtn}>
-        <Link href={'/addsfinfo'} asChild>
+        <Link href={'/addplannedinfo'} asChild>
           <Pressable>
             <Ionicons name="add-circle" size={40} color="black" />
           </Pressable>

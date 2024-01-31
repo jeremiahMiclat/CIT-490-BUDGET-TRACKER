@@ -70,6 +70,12 @@ export default function TabLayout() {
           title: 'Daily Logs',
         }}
       />
+      <Tabs.Screen
+        name="plannedbudget"
+        options={{
+          title: 'Planned Budgets',
+        }}
+      />
 
       <Tabs.Screen
         name="scheduledfunds"
