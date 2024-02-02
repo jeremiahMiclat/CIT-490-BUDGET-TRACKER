@@ -43,7 +43,7 @@ export default function CreatePlan() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const dispatch = useDispatch();
   const stateData = useSelector((state: RootState) => state.data);
-  const formData = useSelector((state: RootState) => state.formData);
+  const formDailyLogs = useSelector((state: RootState) => state.formDailyLogs);
   const debtInfoData = useSelector((state: RootState) => state.formDebtInfo);
   const schedFundsInfoData = useSelector(
     (state: RootState) => state.formSchedFunds
@@ -94,6 +94,7 @@ export default function CreatePlan() {
         ...schedFundsInfoData,
         ...billsInfoData,
         ...dailyBudgetInfo,
+        ...formDailyLogs,
       };
       dispatch(
         counterSlice.actions.updateData(

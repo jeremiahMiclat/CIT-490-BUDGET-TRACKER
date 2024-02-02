@@ -33,6 +33,12 @@ const initialState = {
   formDailyBudget: {
     plannedBudgetInfo: [{ description: 'no saved data', plannedLogs: [] }],
   },
+  formDailyLogs: {
+    dailyLogs: {
+      spent: [{ description: '', amount: 0, date: '' }],
+      received: [{ description: '', amount: 0, date: '' }],
+    },
+  },
   formSubmitted: false,
   dataOnEdit: undefined,
 };
@@ -67,6 +73,9 @@ export const counterSlice = createSlice({
     },
     updateFormSubmitted: (state, action) => {
       state.formSubmitted = action.payload;
+    },
+    upDateDailyLogs: (state, action) => {
+      state.formDailyLogs = action.payload;
     },
     upDateDataOnEdit: (state, action) => {
       state.dataOnEdit = action.payload;
