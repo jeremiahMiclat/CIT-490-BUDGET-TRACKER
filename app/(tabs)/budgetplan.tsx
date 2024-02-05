@@ -38,6 +38,86 @@ export default function BudgetPlanScreen() {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
+  //debtInfo
+  const debtInfo = (itemOnView as any).debtInfo;
+  const totalDebts =
+    (debtInfo as []).reduce((acc, current) => {
+      return acc + Number((current as any).amount);
+    }, 0) || 0;
+
+  //billsInfo
+  const billsInfo = (itemOnView as any).billsInfo;
+  const totalBills =
+    (billsInfo as []).reduce((acc, current) => {
+      return acc + Number((current as any).amount);
+    }, 0) || 0;
+
+  //total future budget
+  const scheduledFundsInfo = (itemOnView as any).scheduledFundsInfo;
+  const totalSf =
+    (scheduledFundsInfo as []).reduce((acc, current) => {
+      return acc + Number((current as any).amount);
+    }, 0) || 0;
+
+  // daily budget
+  const plannedBudgetInfo = (itemOnView as any).plannedBudgetInfo;
+
+  const calculateTotalAmount = (plannedDaily: any[]): number => {
+    let totalAmount = 0;
+
+    plannedDaily.forEach(item => {
+      const startDateTime = dayjs(item.startDate);
+      const endDateTime = dayjs(item.endDate);
+      // Calculate the duration in days
+      const durationInDays = endDateTime.diff(startDateTime, 'day') + 1;
+      // Multiply the duration by the amount and add to the total
+      totalAmount += durationInDays * parseFloat(item.amount);
+    });
+
+    return totalAmount;
+  };
+  const totalPlannedBudget = calculateTotalAmount(plannedBudgetInfo) || 0;
+
+  // daily logs
+  const dailyLogs = (itemOnView as any).dailyLogs;
+  const spentLogs = dailyLogs.spent;
+  const receivedLogs = dailyLogs.received;
+  const totalSpent: number =
+    (spentLogs as []).reduce((acc, current) => {
+      return acc + Number((current as any).amount);
+    }, 0) || 0;
+  const totalReceived: number =
+    (receivedLogs as []).reduce((acc, current) => {
+      return acc + Number((current as any).amount);
+    }, 0) || 0;
+
+  // overall budget
+  const overAllBudget = Number(initialBudget) + totalSf + totalReceived;
+
+  // remaining with sched funds
+  const budgetWSf =
+    overAllBudget - totalSpent - totalBills - totalDebts - totalPlannedBudget;
+
+  // remaining without sched funds
+  const budgetWOSf =
+    overAllBudget -
+    totalSpent -
+    totalBills -
+    totalDebts -
+    totalPlannedBudget -
+    totalSf;
+
+  // daily budget left with sf
+  const decimalPlaces = 2;
+  const multiplier = Math.pow(10, decimalPlaces);
+  const day = dayjs();
+  const durationInDays = dayjs(targetDate).diff(day, 'day') + 1;
+  const dailyBudgetWSf =
+    Math.round((budgetWSf / durationInDays) * multiplier) / multiplier;
+
+  // daily budget left without sf
+  const dailyBudgetWOSf =
+    Math.round((budgetWOSf / durationInDays) * multiplier) / multiplier;
   // edit plan name
   const [planNameOnEdit, setPlanNameOnEdit] = useState(false);
   const [editedPlanName, setEditedPlanName] = useState(
@@ -186,7 +266,6 @@ export default function BudgetPlanScreen() {
 
   const saveTargetDate = (date: any) => {
     const targetDate = editedTargetDate;
-    console.log('in save', date);
   };
 
   // useEffect(() => {
@@ -233,9 +312,8 @@ export default function BudgetPlanScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <TouchableWithoutFeedback onPress={handleScreenPress}> */}
-      <Pressable style={styles.container} onPress={() => handleScreenPress()}>
-        <ScrollView>
+      <ScrollView>
+        <Pressable style={styles.container} onPress={() => handleScreenPress()}>
           <View style={styles.itemContainer}>
             <Text style={styles.item}>Plan Name</Text>
             {planNameOnEdit != true ? (
@@ -368,10 +446,48 @@ export default function BudgetPlanScreen() {
               mode="date"
             />
           )}
-        </ScrollView>
-      </Pressable>
 
-      {/* </TouchableWithoutFeedback> */}
+          <View style={styles.itemContainer}>
+            <Text style={styles.item}>Total Debts: {totalDebts}</Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.item}>Total Bills: {totalBills}</Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.item}>Total Incoming Budget: {totalSf}</Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.item}>
+              Overall Budget: {overAllBudget || 0}
+            </Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.item}>
+              Total Daily Planned Budget: {totalPlannedBudget || 0}
+            </Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.item}>
+              Remaining Budget with Scheduled Funds: {budgetWSf}
+            </Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.item}>
+              Remaining Budget with out Scheduled Funds: {budgetWOSf}
+            </Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.item}>
+              Daily Budget with Scheduled Funds: {dailyBudgetWSf}
+            </Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.item}>
+              Daily Budget with out Scheduled Funds: {dailyBudgetWOSf}
+            </Text>
+          </View>
+        </Pressable>
+      </ScrollView>
     </SafeAreaView>
   );
 }

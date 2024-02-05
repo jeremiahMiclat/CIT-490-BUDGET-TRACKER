@@ -29,7 +29,9 @@ const initialState = {
   formSchedFunds: {
     scheduledFundsInfo: [{ description: 'no saved data', sfLogs: [] }],
   },
-  formBillsInfo: [{ description: 'no saved data', billsLogs: [] }],
+  formBillsInfo: {
+    billsInfo: [{ description: 'no saved data', billsLogs: [] }],
+  },
   formDailyBudget: {
     plannedBudgetInfo: [{ description: 'no saved data', plannedLogs: [] }],
   },
