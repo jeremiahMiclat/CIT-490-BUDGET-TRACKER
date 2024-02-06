@@ -150,14 +150,7 @@ export default function BudgetPlanScreen() {
     overAllBudget - totalSpent - totalBills - totalDebts - totalPlannedBudget;
 
   // remaining without sched funds
-  const budgetWOSf =
-    overAllBudget -
-    totalSpent -
-    totalBills -
-    totalDebts -
-    totalPlannedBudget -
-    totalSf +
-    totalReceivedSf;
+  const budgetWOSf = overAllBudget - totalSf + totalReceivedSf;
 
   const decimalPlaces = 2;
   const multiplier = Math.pow(10, decimalPlaces);
