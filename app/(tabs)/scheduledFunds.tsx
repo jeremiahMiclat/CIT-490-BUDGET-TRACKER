@@ -141,7 +141,7 @@ export default function SFScreen() {
     // console.log('Updated', updatedDebtInfoItem);
 
     // console.log('c', (itemOnView as any).debtInfo);
-    const updatedSfInfo = [...(itemOnView as any).debtInfo];
+    const updatedSfInfo = [...(itemOnView as any).scheduledFundsInfo];
     // console.log('Current dI', updatedDebtInfo);
     updatedSfInfo[scheduledFundInfoIndex] = updatedSfInfoItem;
     // console.log('Updated dI', updatedDebtInfo);
@@ -215,7 +215,7 @@ export default function SFScreen() {
                 <Ionicons name="add-circle" size={24} color="black" />
               </Pressable>
             </Link>
-            {item.item.sfLogs.length > 0 ? (
+            {item.item.sfLogs?.length > 0 ? (
               <FlatList
                 data={item.item.sfLogs}
                 renderItem={logItem => renderLogs(logItem, item)}
