@@ -180,6 +180,10 @@ export default function BudgetPlanScreen() {
   );
 
   const handleSavePlanName = () => {
+    if (editedPlanName == (itemOnView as ItemType).planName) {
+      setPlanNameOnEdit(false);
+      return;
+    }
     const currData = appData;
 
     const updatedItemOnView = {
@@ -217,6 +221,11 @@ export default function BudgetPlanScreen() {
   );
 
   const handleSaveDesc = () => {
+    if (editedDesc == (itemOnView as ItemType).description) {
+      setDescriptionOnEdit(false);
+      return;
+    }
+
     const currData = appData;
 
     const updatedItemOnView = {
@@ -250,10 +259,14 @@ export default function BudgetPlanScreen() {
   // edit initial budget
   const [ibOnEdit, setIbOnedit] = useState(false);
   const [editedIb, setEditedIb] = useState(
-    (itemOnView as ItemType).description
+    (itemOnView as ItemType).initialBudget
   );
 
   const handleSaveIb = () => {
+    if (editedIb == (itemOnView as any).initialBudget) {
+      setIbOnedit(false);
+      return;
+    }
     const currData = appData;
 
     const updatedItemOnView = {
@@ -290,6 +303,12 @@ export default function BudgetPlanScreen() {
     (itemOnView as ItemType).targetDate
   );
   const handleSaveTargetDate = (date: any) => {
+    if (
+      dayjs(date).toString() == dayjs((itemOnView as any).targetDate).toString()
+    ) {
+      return;
+    }
+
     setEditedTargetDate(date);
     const currData = appData;
     const updatedItemOnView = {
