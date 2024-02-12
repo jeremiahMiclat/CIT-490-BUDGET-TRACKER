@@ -73,7 +73,9 @@ export default function HomeScreen() {
 
   const renderHeader = () => {
     return data.value.length < 1 ? (
-      <Text style={styles.flheader}>No saved plans</Text>
+      <View style={styles.flheaderContainer}>
+        <Text style={styles.flheader}>No saved plans</Text>
+      </View>
     ) : (
       <View style={styles.divider}></View>
     );
@@ -88,10 +90,10 @@ export default function HomeScreen() {
           handleNavToBudgetPlan();
         }}
       >
-        <Text>{item?.planName}</Text>
+        <Text style={styles.planNameStyle}>{item?.planName}</Text>
       </Pressable>
       <Pressable onPress={() => handleDeleteItem(index)} style={styles.delBtn}>
-        <AntDesign name="delete" size={18} color="blue" />
+        <AntDesign name="delete" size={18} color="#003300" />
       </Pressable>
     </View>
   );
@@ -201,7 +203,7 @@ export default function HomeScreen() {
       <View style={styles.flFooter}>
         <Pressable onPress={() => handleNavToCreate()} style={styles.row}>
           {/* <Text>Add New Plan</Text> */}
-          <Ionicons name="add-circle-sharp" size={50} color="black" />
+          <Ionicons name="add-circle-sharp" size={50} color="#DCEDC8" />
         </Pressable>
       </View>
     </SafeAreaProvider>
@@ -211,6 +213,8 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // backgroundColor: '#F0F3F4',
+    backgroundColor: '#8DA750',
   },
   flheader: {
     // alignSelf: 'center',
@@ -230,11 +234,10 @@ const styles = StyleSheet.create({
   flContainer: {},
   itemsContainer: {
     flexDirection: 'row',
-    borderWidth: 1,
-    borderRadius: 15,
-    borderColor: 'blue',
+    backgroundColor: '#DCEDC8',
     margin: 10,
     padding: 20,
+    borderRadius: 10,
   },
   item: {
     flex: 8,
@@ -246,5 +249,13 @@ const styles = StyleSheet.create({
   delBtn: {
     flex: 2,
     alignItems: 'flex-end',
+  },
+  planNameStyle: {
+    color: '#003300',
+  },
+  flheaderContainer: {
+    backgroundColor: '#DCEDC8',
+    margin: 20,
+    borderRadius: 10,
   },
 });

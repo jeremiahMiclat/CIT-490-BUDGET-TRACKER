@@ -24,16 +24,16 @@ const initialState = {
     id: null,
     existingData: [{ fieldName: 'no data' }],
   },
-  formData: { data: {}, debtInfo: { description: 'no data' } },
-  formDebtInfo: { debtInfo: [{ description: 'no data', debtlogs: [] }] },
+  formData: { data: {}, debtInfo: {} },
+  formDebtInfo: { debtInfo: [{ debtlogs: [] }] },
   formSchedFunds: {
-    scheduledFundsInfo: [{ description: 'no saved data', sfLogs: [] }],
+    scheduledFundsInfo: [{ sfLogs: [] }],
   },
   formBillsInfo: {
-    billsInfo: [{ description: 'no saved data', billsLogs: [] }],
+    billsInfo: [{ billsLogs: [] }],
   },
   formDailyBudget: {
-    plannedBudgetInfo: [{ description: 'no saved data', plannedLogs: [] }],
+    plannedBudgetInfo: [{ plannedLogs: [] }],
   },
   formDailyLogs: {
     dailyLogs: {
@@ -177,7 +177,7 @@ function RootLayoutNav() {
         <Stack.Screen
           name="(dailylogs)"
           options={{
-            title: '',
+            title: 'Daily Logs',
           }}
         />
       </Stack>

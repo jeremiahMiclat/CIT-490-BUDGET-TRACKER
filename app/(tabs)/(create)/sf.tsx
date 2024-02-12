@@ -66,7 +66,7 @@ export default function ScheduledFundsCreateScreen() {
       return updatedValues;
     });
 
-    setValue(`schedFundsInfo[${index}].date`, date);
+    setValue(`scheduledFundsInfo[${index}].date`, date);
   };
 
   const [DdatePickerIndex, setDDatePickerIndex] = useState(null);
@@ -138,7 +138,7 @@ export default function ScheduledFundsCreateScreen() {
   } = useForm();
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'schedFundsInfo',
+    name: 'scheduledFundsInfo',
   });
   const watchedFields = watch();
   const onSubmit = (data: any) => {
@@ -161,7 +161,7 @@ export default function ScheduledFundsCreateScreen() {
     } else {
       try {
         dispatch(counterSlice.actions.updateSchedFundForm(watch()));
-        reset({ schedFundsInfo: watch().schedFundsInfo });
+        reset({ scheduledFundsInfo: watch().scheduledFundsInfo });
       } catch (error) {
         console.log('useEffect error');
       }
@@ -203,7 +203,7 @@ export default function ScheduledFundsCreateScreen() {
                         value={value}
                       />
                     )}
-                    name={`schedFundsInfo[${index}].description`}
+                    name={`scheduledFundsInfo[${index}].description`}
                   />
                 </View>
 
@@ -226,7 +226,7 @@ export default function ScheduledFundsCreateScreen() {
                         </Pressable>
                       </>
                     )}
-                    name={`schedFundsInfo[${index}].date`}
+                    name={`scheduledFundsInfo[${index}].date`}
                   />
                 </View>
 
@@ -250,7 +250,7 @@ export default function ScheduledFundsCreateScreen() {
                         keyboardType={'number-pad'}
                       />
                     )}
-                    name={`schedFundsInfo[${index}].amount`}
+                    name={`scheduledFundsInfo[${index}].amount`}
                   />
                 </View>
 

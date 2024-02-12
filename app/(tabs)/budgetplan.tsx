@@ -41,20 +41,20 @@ export default function BudgetPlanScreen() {
   //debtInfo
   const debtInfo = (itemOnView as any).debtInfo;
   const totalDebts =
-    (debtInfo as []).reduce((acc, current) => {
+    (debtInfo as [])?.reduce((acc, current) => {
       const logs = (current as any).debtlogs;
       const totalAmount =
-        (logs as []).reduce((prev, currLog) => {
+        (logs as [])?.reduce((prev, currLog) => {
           return prev + Number((currLog as any).amountPaid);
         }, 0) || 0;
       return acc + Number((current as any).amount);
     }, 0) || 0;
 
   const totalPaidDebts =
-    (debtInfo as []).reduce((acc, current) => {
+    (debtInfo as [])?.reduce((acc, current) => {
       const logs = (current as any).debtlogs;
       const totalAmount =
-        (logs as []).reduce((prev, currLog) => {
+        (logs as [])?.reduce((prev, currLog) => {
           return prev + Number((currLog as any).amountPaid);
         }, 0) || 0;
       return acc + totalAmount;
@@ -65,15 +65,15 @@ export default function BudgetPlanScreen() {
   //billsInfo
   const billsInfo = (itemOnView as any).billsInfo;
   const totalBills =
-    (billsInfo as []).reduce((acc, current) => {
+    (billsInfo as [])?.reduce((acc, current) => {
       return acc + Number((current as any).amount);
     }, 0) || 0;
 
   const totalPaidBills =
-    (billsInfo as []).reduce((acc, current) => {
+    (billsInfo as [])?.reduce((acc, current) => {
       const logs = (current as any).billsLogs;
       const totalAmount =
-        (logs as []).reduce((prev, currLog) => {
+        (logs as [])?.reduce((prev, currLog) => {
           return prev + Number((currLog as any).amountPaid);
         }, 0) || 0;
       return acc + totalAmount;
@@ -84,12 +84,12 @@ export default function BudgetPlanScreen() {
   //total future budget
   const scheduledFundsInfo = (itemOnView as any).scheduledFundsInfo;
   const totalSf =
-    (scheduledFundsInfo as []).reduce((acc, current) => {
+    (scheduledFundsInfo as [])?.reduce((acc, current) => {
       return acc + Number((current as any).amount);
     }, 0) || 0;
 
   const totalReceivedSf =
-    (scheduledFundsInfo as []).reduce((acc, current) => {
+    (scheduledFundsInfo as [])?.reduce((acc, current) => {
       const logs = (current as any).sfLogs;
       const totalAmount =
         (logs as [])?.reduce((prev, currLog) => {
@@ -366,13 +366,13 @@ export default function BudgetPlanScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, styles.safeAreaView]}>
       <ScrollView>
         <Pressable style={styles.container} onPress={() => handleScreenPress()}>
           {/**Plan Information */}
           <View style={styles.planInfoContainer}>
             <View style={styles.itemContainerHeader}>
-              <Text>Plan Information</Text>
+              <Text style={styles.text}>Plan Information</Text>
             </View>
             <View style={styles.itemContainer}>
               <Text style={styles.item}>Plan Name</Text>
@@ -516,7 +516,7 @@ export default function BudgetPlanScreen() {
           {/**Debts Information */}
           <View style={styles.planInfoContainer}>
             <View style={styles.itemContainerHeader}>
-              <Text>Debts Information</Text>
+              <Text style={styles.text}>Debts Information</Text>
             </View>
             <View style={styles.itemContainer}>
               <Text style={styles.item}>Total Debts: {totalDebts}</Text>
@@ -540,7 +540,7 @@ export default function BudgetPlanScreen() {
           {/**Bills Information */}
           <View style={styles.planInfoContainer}>
             <View style={styles.itemContainerHeader}>
-              <Text>Bills Information</Text>
+              <Text style={styles.text}>Bills Information</Text>
             </View>
             <View style={styles.itemContainer}>
               <Text style={styles.item}>Total Bills: {totalBills}</Text>
@@ -564,7 +564,7 @@ export default function BudgetPlanScreen() {
           {/**Scheduled Funds & total budget info */}
           <View style={styles.planInfoContainer}>
             <View style={styles.itemContainerHeader}>
-              <Text>Scheduled Funds Information</Text>
+              <Text style={styles.text}>Scheduled Funds Information</Text>
             </View>
             <View style={styles.itemContainer}>
               <Text style={styles.item}>Total Incoming Budget: {totalSf}</Text>
@@ -582,7 +582,7 @@ export default function BudgetPlanScreen() {
           {/**planned expenses info */}
           <View style={styles.planInfoContainer}>
             <View style={styles.itemContainerHeader}>
-              <Text>Planned Expenses</Text>
+              <Text style={styles.text}>Planned Expenses</Text>
             </View>
             <View style={styles.itemContainer}>
               <Text style={styles.item}>
@@ -599,7 +599,7 @@ export default function BudgetPlanScreen() {
           {/**remaining budget info */}
           <View style={styles.planInfoContainer}>
             <View style={styles.itemContainerHeader}>
-              <Text>Remaining Budget Information</Text>
+              <Text style={styles.text}>Remaining Budget Information</Text>
             </View>
             <View style={styles.itemContainer}>
               <Text style={styles.item}>With Scheduled Funds: {budgetWSf}</Text>
@@ -614,15 +614,17 @@ export default function BudgetPlanScreen() {
             </View>
           </View>
           {/**daily budget info */}
-          <View style={styles.itemContainer}>
-            <Text style={styles.item}>
-              Daily Budget with Scheduled Funds: {dailyBudgetWSf}
-            </Text>
-          </View>
-          <View style={styles.itemContainer}>
-            <Text style={styles.item}>
-              Daily Budget with out Scheduled Funds: {dailyBudgetWOSf}
-            </Text>
+          <View style={styles.planInfoContainer}>
+            <View style={styles.itemContainer}>
+              <Text style={styles.item}>
+                Daily Budget with Scheduled Funds: {dailyBudgetWSf}
+              </Text>
+            </View>
+            <View style={styles.itemContainer}>
+              <Text style={styles.item}>
+                Daily Budget with out Scheduled Funds: {dailyBudgetWOSf}
+              </Text>
+            </View>
           </View>
         </Pressable>
       </ScrollView>
@@ -636,9 +638,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     margin: 10,
     padding: 10,
-    borderColor: 'blue',
-    borderWidth: 1,
     borderRadius: 10,
+    backgroundColor: '#eaf7da',
   },
   itemContainerHeader: {
     flexDirection: 'row',
@@ -651,6 +652,7 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
+    color: '#003300',
   },
   row: {
     flexDirection: 'row',
@@ -661,15 +663,20 @@ const styles = StyleSheet.create({
   itemInputContainer: {
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: 'pink',
+    borderColor: '#142c14',
     padding: 5,
   },
   planInfoContainer: {
-    borderWidth: 1,
     borderRadius: 10,
-    borderColor: 'blue',
+    backgroundColor: '#DCEDC8',
     padding: 20,
-    margin: 5,
+    margin: 10,
     marginBottom: 50,
+  },
+  safeAreaView: {
+    backgroundColor: '#8DA750',
+  },
+  text: {
+    color: '#003300',
   },
 });
