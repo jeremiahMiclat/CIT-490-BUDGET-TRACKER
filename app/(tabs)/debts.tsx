@@ -68,17 +68,17 @@ export default function DebtsScreen() {
   ) => {
     return (
       <View style={styles.logItemContainer}>
-        <Text style={styles.logItemText}>
+        <Text style={[styles.logItemText, styles.text]}>
           {item.item.notes != undefined
             ? JSON.stringify(item.item.notes)
             : 'not set'}
         </Text>
-        <Text style={styles.logItemText}>
+        <Text style={[styles.logItemText, styles.text]}>
           {item.item.amountPaid != undefined
             ? JSON.stringify(item.item.amountPaid)
             : 'not set'}
         </Text>
-        <Text style={styles.logItemText}>
+        <Text style={[styles.logItemText, styles.text]}>
           {item.item.date != undefined
             ? JSON.stringify(item.item.date)
             : 'not set'}
@@ -89,7 +89,7 @@ export default function DebtsScreen() {
           }
           style={styles.delLogBtn}
         >
-          <MaterialIcons name="delete" size={24} color="pink" />
+          <MaterialIcons name="delete" size={24} color="#DCEDC8" />
         </Pressable>
       </View>
     );
@@ -167,25 +167,27 @@ export default function DebtsScreen() {
     return (
       <View style={styles.flatListContainer}>
         <View style={[styles.row, styles.itemContainer]}>
-          <Text>Description: </Text>
-          <Text>{item.item.description + ''}</Text>
+          <Text style={styles.text}>Description: </Text>
+          <Text style={styles.text}>{item.item.description + ''}</Text>
         </View>
 
         <View style={[styles.row, styles.itemContainer]}>
-          <Text>Amount: </Text>
-          <Text>{item.item.amount + ''}</Text>
+          <Text style={styles.text}>Amount: </Text>
+          <Text style={styles.text}>{item.item.amount + ''}</Text>
         </View>
 
         <View style={[styles.row, styles.itemContainer]}>
-          <Text>Date Incurred: </Text>
-          <Text>
+          <Text style={styles.text}>Date Incurred: </Text>
+          <Text style={styles.text}>
             {dayjs(item.item.dateIncurred).format('MMMM DD, YYYY') + ''}
           </Text>
         </View>
 
         <View style={[styles.row, styles.itemContainer]}>
-          <Text>Due Date: </Text>
-          <Text>{dayjs(item.item.dueDate).format('MMMM DD, YYYY') + ''}</Text>
+          <Text style={styles.text}>Due Date: </Text>
+          <Text style={styles.text}>
+            {dayjs(item.item.dueDate).format('MMMM DD, YYYY') + ''}
+          </Text>
         </View>
 
         <Pressable
@@ -194,8 +196,8 @@ export default function DebtsScreen() {
             toggleLogs(item.index);
           }}
         >
-          <Text>Logs</Text>
-          <Entypo name="select-arrows" size={24} color="black" />
+          <Text style={styles.text}>Logs</Text>
+          <Entypo name="select-arrows" size={24} color="#537B2F" />
         </Pressable>
 
         {showLogs[item.index] && (
@@ -212,7 +214,7 @@ export default function DebtsScreen() {
                   );
                 }}
               >
-                <Ionicons name="add-circle" size={24} color="black" />
+                <Ionicons name="add-circle" size={24} color="#537B2F" />
               </Pressable>
             </Link>
             {item.item.debtlogs.length > 0 ? (
@@ -223,7 +225,7 @@ export default function DebtsScreen() {
               />
             ) : (
               <View style={styles.logItemContainer}>
-                <Text style={styles.logItemText}>No logs</Text>
+                <Text style={[styles.logItemText, styles.text]}>No logs</Text>
               </View>
             )}
           </View>
@@ -233,14 +235,14 @@ export default function DebtsScreen() {
           style={styles.delDebtInfo}
           onPress={(event: GestureResponderEvent) => handleDeleteDebtInfo(item)}
         >
-          <MaterialIcons name="delete" size={24} color="blue" />
+          <MaterialIcons name="delete" size={24} color="#537B2F" />
         </Pressable>
       </View>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, styles.safeAreaView]}>
       <View style={styles.container}>
         <FlatList
           // style={styles.flContainer}
@@ -254,7 +256,7 @@ export default function DebtsScreen() {
       <View style={styles.addBtn}>
         <Link href={'/adddebtinfo'} asChild>
           <Pressable>
-            <Ionicons name="add-circle" size={40} color="black" />
+            <Ionicons name="add-circle" size={40} color="#eaf7da" />
           </Pressable>
         </Link>
       </View>
@@ -270,9 +272,8 @@ const styles = StyleSheet.create({
   itemContainer: {
     margin: 10,
     padding: 10,
-    borderWidth: 1,
-    borderColor: 'blue',
     borderRadius: 10,
+    backgroundColor: '#eaf7da',
   },
   itemTitle: {},
   itemText: {},
@@ -287,20 +288,17 @@ const styles = StyleSheet.create({
   logItemContainer: {
     padding: 10,
     margin: 10,
-    borderColor: 'pink',
-    borderWidth: 1,
+    backgroundColor: '#8DA750',
     borderRadius: 10,
   },
   logItemText: {
-    borderColor: 'pink',
-    borderWidth: 1,
+    backgroundColor: '#DCEDC8',
     borderRadius: 10,
     padding: 10,
     margin: 10,
   },
   flatListContainer: {
-    borderColor: 'blue',
-    borderWidth: 1,
+    backgroundColor: '#DCEDC8',
     borderRadius: 10,
     padding: 10,
     margin: 10,
@@ -312,5 +310,11 @@ const styles = StyleSheet.create({
   delLogBtn: {
     alignSelf: 'center',
     padding: 10,
+  },
+  safeAreaView: {
+    backgroundColor: '#8DA750',
+  },
+  text: {
+    color: '#003300',
   },
 });

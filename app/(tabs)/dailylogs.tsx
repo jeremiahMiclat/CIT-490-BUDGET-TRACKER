@@ -34,21 +34,20 @@ export default function DailyLogsScreen() {
   }, 0);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <View style={styles.containerItem}>
-          <Text>Total Spent: {totalSpent}</Text>
+    <SafeAreaView style={[styles.container, styles.safeAreaView]}>
+      <View style={[styles.itemsContainer]}>
+        <View style={[styles.containerItem, styles.itemContainer]}>
+          <Text style={[styles.text]}>Total Spent: {totalSpent}</Text>
         </View>
-        <View style={styles.containerItem}>
-          <Text>Total Received: {totalReceived}</Text>
+        <View style={[styles.containerItem, styles.itemContainer]}>
+          <Text style={[styles.text]}>Total Received: {totalReceived}</Text>
         </View>
-
-        <Link href={'/(dailylogs)/'} style={styles.addBtn} asChild>
-          <Pressable>
-            <Ionicons name="add-circle-sharp" size={50} color="black" />
-          </Pressable>
-        </Link>
       </View>
+      <Link href={'/(dailylogs)/'} style={styles.addBtn} asChild>
+        <Pressable>
+          <Ionicons name="add-circle-sharp" size={50} color="#eaf7da" />
+        </Pressable>
+      </Link>
     </SafeAreaView>
   );
 }
@@ -73,5 +72,22 @@ const styles = StyleSheet.create({
   },
   containerItem: {
     padding: 20,
+  },
+  safeAreaView: {
+    backgroundColor: '#8DA750',
+  },
+  text: {
+    color: '#003300',
+  },
+  itemsContainer: {
+    backgroundColor: '#DCEDC8',
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
+  },
+  itemContainer: {
+    margin: 10,
+    borderRadius: 10,
+    backgroundColor: '#eaf7da',
   },
 });
