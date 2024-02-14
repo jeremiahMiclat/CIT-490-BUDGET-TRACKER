@@ -157,7 +157,7 @@ export default function CreatePlan() {
       <ActivityIndicator size="large" color="#00ff00" />
     </View>
   ) : (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, styles.safeAreaView]}>
       {/* <TouchableWithoutFeedback onPress={handlePressOnScreen}> */}
       <View style={styles.container}>
         <ScrollView
@@ -173,7 +173,7 @@ export default function CreatePlan() {
                 render={() => <></>}
               />
               <Pressable onPress={() => setShowTDPicker(!showTDPicker)}>
-                <Text>
+                <Text style={styles.text}>
                   {'Target date:        ' +
                     dayjs(targetDateVal).format('MMMM DD, YYYY')}
                 </Text>
@@ -214,6 +214,7 @@ export default function CreatePlan() {
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
+                    style={styles.text}
                   />
                 )}
                 name="planName"
@@ -241,6 +242,7 @@ export default function CreatePlan() {
                     value={value}
                     numberOfLines={3}
                     textAlignVertical="top"
+                    style={styles.text}
                   />
                 )}
                 name="description"
@@ -261,6 +263,7 @@ export default function CreatePlan() {
                     onChangeText={onChange}
                     value={value}
                     keyboardType={'number-pad'}
+                    style={styles.text}
                   />
                 )}
                 name="initialBudget"
@@ -291,13 +294,12 @@ const styles = StyleSheet.create({
   },
   scrollViewItems: {
     padding: 15,
-    borderBlockColor: 'blue',
-    borderWidth: 1,
+    backgroundColor: '#DCEDC8',
     borderRadius: 5,
     margin: 20,
   },
   submitBtn: {
-    backgroundColor: 'blue',
+    backgroundColor: '#537B2F',
     padding: 20,
     margin: 50,
     borderRadius: 10,
@@ -309,5 +311,11 @@ const styles = StyleSheet.create({
   },
   required: {
     color: 'red',
+  },
+  safeAreaView: {
+    backgroundColor: '#8DA750',
+  },
+  text: {
+    color: '#003300',
   },
 });

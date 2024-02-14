@@ -37,6 +37,7 @@ export default function DebtInfoScreen() {
   const [day, setDay] = useState(dayjs());
   const [OdatePickerIndex, setODatePickerIndex] = useState(null);
   const [OdateValues, setODateValues] = useState<any>([]);
+  const [addBtnVisibility, setAddBtnVisibility] = useState(true);
 
   const showODatePicker = (index: any) => {
     try {
@@ -111,12 +112,14 @@ export default function DebtInfoScreen() {
       () => {
         hideDDatePicker();
         hideODatePicker();
+        setAddBtnVisibility(false);
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
         setKeyboardVisible(false);
+        setAddBtnVisibility(true);
       }
     );
 
@@ -156,8 +159,6 @@ export default function DebtInfoScreen() {
     showODatePicker(null);
   };
 
-  useEffect(() => {}, [formIsSubmitted]);
-
   useEffect(() => {
     if (isFocused) {
     } else {
@@ -174,20 +175,8 @@ export default function DebtInfoScreen() {
   }, [isFocused]);
 
   return (
-    <SafeAreaView style={styles.flex1}>
+    <SafeAreaView style={[styles.flex1, styles.safeAreaView]}>
       <View style={styles.container}>
-        <TouchableWithoutFeedback onPress={handlePressOnScreen}>
-          <View>
-            <Pressable
-              onPress={() => [
-                append({ description: null, amount: null, plannedLogs: [] }),
-              ]}
-              style={styles.addNewBtn}
-            >
-              <Text style={styles.addNewBtnText}>Add</Text>
-            </Pressable>
-          </View>
-        </TouchableWithoutFeedback>
         <ScrollView style={styles.sv} keyboardShouldPersistTaps="handled">
           <View style={styles.flex1}>
             {fields.map((field, index) => (
@@ -201,6 +190,7 @@ export default function DebtInfoScreen() {
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
+                        style={styles.text}
                       />
                     )}
                     name={`plannedBudgetInfo[${index}].description`}
@@ -217,6 +207,7 @@ export default function DebtInfoScreen() {
                         onChangeText={onChange}
                         value={value}
                         keyboardType={'number-pad'}
+                        style={styles.text}
                       />
                     )}
                     name={`plannedBudgetInfo[${index}].amount`}
@@ -295,6 +286,22 @@ export default function DebtInfoScreen() {
             ))}
           </View>
         </ScrollView>
+        {addBtnVisibility ? (
+          <TouchableWithoutFeedback onPress={handlePressOnScreen}>
+            <View>
+              <Pressable
+                onPress={() => [
+                  append({ description: null, amount: null, plannedLogs: [] }),
+                ]}
+                style={styles.addNewBtn}
+              >
+                <Text style={styles.addNewBtnText}>Add</Text>
+              </Pressable>
+            </View>
+          </TouchableWithoutFeedback>
+        ) : (
+          <></>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -305,14 +312,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   addNewBtn: {
-    backgroundColor: 'blue',
+    backgroundColor: '#537B2F',
     padding: 20,
+    margin: 20,
     alignSelf: 'center',
     borderRadius: 10,
   },
 
   addNewBtnText: {
-    color: 'white',
+    color: '#eaf7da',
   },
   fields: {
     margin: 20,
@@ -320,18 +328,16 @@ const styles = StyleSheet.create({
   fieldInput: {
     padding: 10,
     margin: 10,
-    borderColor: 'blue',
-    borderWidth: 1,
     borderRadius: 10,
   },
   fieldRBtn: {
-    backgroundColor: 'red',
+    backgroundColor: '#537B2F',
     padding: 10,
     alignSelf: 'center',
     borderRadius: 10,
   },
   RBtnText: {
-    color: 'white',
+    color: '#eaf7da',
   },
   container: {
     flex: 1,
@@ -356,20 +362,24 @@ const styles = StyleSheet.create({
   },
   itemsContainer: {
     flex: 1,
-    borderColor: 'blue',
-    borderWidth: 1,
+    backgroundColor: '#DCEDC8',
     borderRadius: 10,
     margin: 10,
     padding: 10,
   },
   items: {
     padding: 10,
-    borderColor: 'blue',
-    borderWidth: 0.5,
+    backgroundColor: '#eaf7da',
     borderRadius: 10,
     margin: 10,
   },
   dateInput: {
-    color: 'black',
+    color: '#003300',
+  },
+  safeAreaView: {
+    backgroundColor: '#8DA750',
+  },
+  text: {
+    color: '#003300',
   },
 });

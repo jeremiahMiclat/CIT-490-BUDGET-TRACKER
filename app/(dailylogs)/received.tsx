@@ -26,18 +26,22 @@ export default function DailyLogsSpent() {
   const renderLogs = (item: any) => {
     return (
       <View style={styles.listItemContainer}>
-        <Text style={styles.listItem}>
+        <Text style={[styles.listItem, styles.text]}>
           Description: {item?.item?.description}
         </Text>
 
-        <Text style={styles.listItem}>Amount: {item?.item?.amount}</Text>
+        <Text style={[styles.listItem, styles.text]}>
+          Amount: {item?.item?.amount}
+        </Text>
 
-        <Text style={styles.listItem}>Date: {item?.item?.date}</Text>
+        <Text style={[styles.listItem, styles.text]}>
+          Date: {item?.item?.date}
+        </Text>
         <Pressable
           style={styles.delIcon}
           onPress={(event: GestureResponderEvent) => handleDelLog(item)}
         >
-          <MaterialIcons name="delete" size={24} color="black" />
+          <MaterialIcons name="delete" size={24} color="#537B2F" />
         </Pressable>
       </View>
     );
@@ -73,7 +77,10 @@ export default function DailyLogsSpent() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, styles.safeAreaView]}>
+      <View style={[styles.listItemContainer, styles.rowCenter]}>
+        <Text style={styles.text}>Daily Logs for Received Funds</Text>
+      </View>
       <View style={styles.container}>
         <FlatList
           data={receivedLogs}
@@ -84,7 +91,7 @@ export default function DailyLogsSpent() {
 
       <Link href={'/addreceived'} style={styles.addBtn} asChild>
         <Pressable>
-          <Ionicons name="add-circle-sharp" size={50} color="black" />
+          <Ionicons name="add-circle-sharp" size={50} color="#eaf7da" />
         </Pressable>
       </Link>
     </SafeAreaView>
@@ -100,15 +107,13 @@ const styles = StyleSheet.create({
     padding: 30,
   },
   listItem: {
-    borderColor: 'blue',
-    borderWidth: 1,
+    backgroundColor: '#eaf7da',
     borderRadius: 10,
     padding: 10,
     margin: 10,
   },
   listItemContainer: {
-    borderColor: 'blue',
-    borderWidth: 1,
+    backgroundColor: '#DCEDC8',
     borderRadius: 10,
     padding: 10,
     margin: 10,
@@ -116,5 +121,15 @@ const styles = StyleSheet.create({
   delIcon: {
     alignSelf: 'center',
     margin: 10,
+  },
+  safeAreaView: {
+    backgroundColor: '#8DA750',
+  },
+  text: {
+    color: '#003300',
+  },
+  rowCenter: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 });

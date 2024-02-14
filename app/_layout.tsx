@@ -131,7 +131,14 @@ function RootLayoutNav() {
 
   return (
     <Provider store={store}>
-      <Stack>
+      <Stack
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#537B2F',
+          },
+          headerTintColor: '#DCEDC8',
+        }}
+      >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="signin" options={{ presentation: 'modal' }} />
         <Stack.Screen name="websignin" options={{ presentation: 'modal' }} />
@@ -178,6 +185,28 @@ function RootLayoutNav() {
           name="(dailylogs)"
           options={{
             title: 'Daily Logs',
+            headerStyle: {
+              backgroundColor: '#537B2F',
+            },
+            headerTintColor: '#DCEDC8',
+          }}
+        />
+        <Stack.Screen
+          name="addreceived"
+          options={{
+            presentation: 'modal',
+            title: 'Add Received Funds Log',
+            headerStyle: { backgroundColor: '#537B2F' },
+            headerTintColor: '#DCEDC8',
+          }}
+        />
+        <Stack.Screen
+          name="addspent"
+          options={{
+            presentation: 'modal',
+            title: 'Add Spent Funds Log',
+            headerStyle: { backgroundColor: '#537B2F' },
+            headerTintColor: '#DCEDC8',
           }}
         />
       </Stack>

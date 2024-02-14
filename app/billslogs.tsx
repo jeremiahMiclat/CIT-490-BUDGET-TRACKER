@@ -84,7 +84,7 @@ export default function AddBillsLogScreen() {
     );
   };
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safeAreaView}>
       <ScrollView>
         <View style={styles.controllerContainer}>
           <Controller
@@ -95,6 +95,7 @@ export default function AddBillsLogScreen() {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                style={styles.text}
               />
             )}
             name="notes"
@@ -110,6 +111,7 @@ export default function AddBillsLogScreen() {
                 onChangeText={onChange}
                 value={value}
                 keyboardType={'number-pad'}
+                style={styles.text}
               />
             )}
             name="amountPaid"
@@ -119,7 +121,9 @@ export default function AddBillsLogScreen() {
         <View style={styles.controllerContainer}>
           <Controller control={control} name="date" render={() => <></>} />
           <Pressable onPress={() => setShowDTPicker(!showDTPicker)}>
-            <Text>{'Date:        ' + dayjs(date).format('MMMM DD, YYYY')}</Text>
+            <Text style={styles.text}>
+              {'Date:        ' + dayjs(date).format('MMMM DD, YYYY')}
+            </Text>
           </Pressable>
           {showDTPicker && (
             <Controller
@@ -141,18 +145,18 @@ export default function AddBillsLogScreen() {
             />
           )}
         </View>
-        <Link href={'/(tabs)/bills'} asChild style={styles.subtmitBtn}>
-          <Pressable
-            onPress={() => {
-              setValue('date', date.toString());
-              setValue('dateAdded', dayjs().toString());
-              handleSubmit(onSubmit)();
-            }}
-          >
-            <AntDesign name="checkcircle" size={50} color="green" />
-          </Pressable>
-        </Link>
       </ScrollView>
+      <Link href={'/(tabs)/bills'} asChild style={styles.subtmitBtn}>
+        <Pressable
+          onPress={() => {
+            setValue('date', date.toString());
+            setValue('dateAdded', dayjs().toString());
+            handleSubmit(onSubmit)();
+          }}
+        >
+          <AntDesign name="checkcircle" size={50} color="#eaf7da" />
+        </Pressable>
+      </Link>
     </SafeAreaView>
   );
 }
@@ -162,9 +166,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   controllerContainer: {
-    borderColor: 'blue',
     borderRadius: 10,
-    borderWidth: 1,
+    backgroundColor: '#DCEDC8',
     padding: 10,
     margin: 10,
   },
@@ -172,5 +175,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     padding: 10,
     margin: 50,
+  },
+  safeAreaView: {
+    backgroundColor: '#8DA750',
+    flex: 1,
+  },
+  text: {
+    color: '#003300',
   },
 });

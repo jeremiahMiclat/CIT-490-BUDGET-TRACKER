@@ -108,7 +108,9 @@ export default function AddDebtInfoScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, styles.contentContainer]}>
+    <SafeAreaView
+      style={[styles.container, styles.contentContainer, styles.safeAreaView]}
+    >
       <ScrollView style={[styles.container]}>
         <Pressable style={styles.container} onPress={handleScreenPress}>
           <View style={styles.itemContainer}>
@@ -146,7 +148,7 @@ export default function AddDebtInfoScreen() {
             <Pressable
               onPress={() => setDateIncurredVisible(!dateIncurredVisible)}
             >
-              <Text>
+              <Text style={styles.text}>
                 Date: {dateIncurred && dateIncurred.format('MMMM DD, YYYY')}
               </Text>
             </Pressable>
@@ -217,22 +219,27 @@ const styles = StyleSheet.create({
   itemContainer: {
     margin: 10,
     padding: 10,
-    borderBlockColor: 'blue',
-    borderWidth: 1,
+    backgroundColor: '#DCEDC8',
     borderRadius: 10,
   },
-  itemInput: {},
+  itemInput: { color: '#003300' },
   subtmitBtn: {
     alignSelf: 'center',
     padding: 20,
     marginBottom: 30,
-    backgroundColor: 'blue',
+    backgroundColor: '#537B2F',
     borderRadius: 10,
   },
   subtmitBtnTxt: {
-    color: '#ffffff',
+    color: '#eaf7da',
   },
   contentContainer: {
     flexDirection: 'column',
+  },
+  safeAreaView: {
+    backgroundColor: '#8DA750',
+  },
+  text: {
+    color: '#003300',
   },
 });
