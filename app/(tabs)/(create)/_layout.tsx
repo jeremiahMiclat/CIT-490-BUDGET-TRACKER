@@ -1,7 +1,13 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import { Platform, Pressable, useColorScheme } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import {
+  FontAwesome5,
+  Foundation,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 export default function TabLayout() {
   return (
@@ -22,7 +28,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Submit',
+          title: 'Create New Plan',
           tabBarHideOnKeyboard: true,
           headerRight: () => (
             <Link href={'/(tabs)/'} asChild>
@@ -38,6 +44,14 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
+          tabBarLabel: 'Save',
+          tabBarIcon: ({ focused }) => (
+            <Entypo
+              name="save"
+              size={24}
+              color={focused ? '#003300' : '#eaf7da'}
+            />
+          ),
         }}
       />
       <Tabs.Screen
@@ -45,6 +59,13 @@ export default function TabLayout() {
         options={{
           title: 'Planned Budget',
           tabBarHideOnKeyboard: true,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="notebook-multiple"
+              size={24}
+              color={focused ? '#003300' : '#eaf7da'}
+            />
+          ),
         }}
       />
       <Tabs.Screen
@@ -52,6 +73,13 @@ export default function TabLayout() {
         options={{
           title: 'Debts',
           tabBarHideOnKeyboard: true,
+          tabBarIcon: ({ focused }) => (
+            <FontAwesome5
+              name="book-dead"
+              size={24}
+              color={focused ? '#003300' : '#eaf7da'}
+            />
+          ),
         }}
       />
       <Tabs.Screen
@@ -59,6 +87,13 @@ export default function TabLayout() {
         options={{
           title: 'Bills',
           tabBarHideOnKeyboard: true,
+          tabBarIcon: ({ focused }) => (
+            <Foundation
+              name="dollar"
+              size={24}
+              color={focused ? '#003300' : '#eaf7da'}
+            />
+          ),
         }}
       />
       <Tabs.Screen
@@ -66,6 +101,13 @@ export default function TabLayout() {
         options={{
           title: 'Scheduled',
           tabBarHideOnKeyboard: true,
+          tabBarIcon: ({ focused }) => (
+            <MaterialIcons
+              name="schedule"
+              size={24}
+              color={focused ? '#003300' : '#eaf7da'}
+            />
+          ),
         }}
       />
     </Tabs>
