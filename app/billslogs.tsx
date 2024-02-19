@@ -36,7 +36,14 @@ export default function AddBillsLogScreen() {
     getValues,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      notes: '',
+      amountPaid: '',
+      date: '',
+      dateAdded: '',
+    },
+  });
   const [showDTPicker, setShowDTPicker] = useState(false);
   const [date, setDate] = useState(dayjs());
   const dataIdentifier = useSelector(
@@ -50,6 +57,12 @@ export default function AddBillsLogScreen() {
   const [appDataValue, setAppDataValue] = useState(appData.value as any);
 
   const onSubmit = (data: any) => {
+    if (data.amountPaid == '') {
+      data.amountPaid = '0';
+    }
+    if (data.notes == '') {
+      data.notes = 'No notes';
+    }
     const billsInfoItems = (itemOnView as any).billsInfo;
     const billsInfoIndex = (dataOnEdit as any).index;
     const billsInfoItemOnEdit = (dataOnEdit as any).billsInfo;

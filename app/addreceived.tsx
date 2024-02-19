@@ -45,7 +45,13 @@ export default function AddDebtInfoScreen() {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      description: '',
+      amount: '',
+      date: dayjs().toString(),
+    },
+  });
 
   useEffect(() => {
     // console.log('data', data);
@@ -80,6 +86,9 @@ export default function AddDebtInfoScreen() {
   }, []);
 
   const onSubmit = (data: any) => {
+    if (data.amount == '') {
+      data.amount = '0';
+    }
     const currSpentLogs = (onView as any).dailyLogs.spent;
     const currReceivedLogs = (onView as any).dailyLogs.received;
     const newReceivedData = [...currReceivedLogs, data];

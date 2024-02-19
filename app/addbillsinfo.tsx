@@ -45,7 +45,14 @@ export default function AddBillsInfoScreen() {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      description: '',
+      amount: '',
+      startDate: '',
+      dueDate: '',
+    },
+  });
 
   useEffect(() => {
     // console.log('data', data);
@@ -80,6 +87,9 @@ export default function AddBillsInfoScreen() {
   }, []);
 
   const onSubmit = (data: any) => {
+    if (data.amount == '') {
+      data.amount = '0';
+    }
     const newData = {
       ...data,
       billsLogs: [],

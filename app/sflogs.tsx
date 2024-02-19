@@ -44,7 +44,14 @@ export default function AddSfLogScreen() {
     getValues,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      notes: '',
+      amount: '',
+      date: '',
+      dateAdded: '',
+    },
+  });
   const [showDTPicker, setShowDTPicker] = useState(false);
   const [date, setDate] = useState(dayjs());
   const dataIdentifier = useSelector(
@@ -58,6 +65,12 @@ export default function AddSfLogScreen() {
   const appData = useSelector((state: RootState) => state.data);
 
   const onSubmit = (data: any) => {
+    if (data.amount == '') {
+      data.amount = '0';
+    }
+    if (data.notes == '') {
+      data.notes = 'No notes';
+    }
     const sfInfoItems = (itemOnView as any).scheduledFundsInfo;
     const sfInfoIndex = (dataOnEdit as any).index;
     const sfInfoItemOnEdit = (dataOnEdit as any).scheduledFundsInfo;

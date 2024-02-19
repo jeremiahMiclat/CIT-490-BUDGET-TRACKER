@@ -45,7 +45,14 @@ export default function AddDebtInfoScreen() {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      description: '',
+      amount: '',
+      dateIncurred: '',
+      dueDate: '',
+    },
+  });
 
   useEffect(() => {
     // console.log('data', data);
@@ -80,7 +87,9 @@ export default function AddDebtInfoScreen() {
   }, []);
 
   const onSubmit = (data: any) => {
-    console.log('being submit', data);
+    if (data.amount == '') {
+      data.amount = '0';
+    }
     const newData = {
       ...data,
       debtlogs: [],

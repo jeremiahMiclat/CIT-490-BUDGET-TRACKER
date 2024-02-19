@@ -25,20 +25,20 @@ const initialState = {
     existingData: [{ fieldName: 'no data' }],
   },
   formData: { data: {}, debtInfo: {} },
-  formDebtInfo: { debtInfo: [{ debtlogs: [] }] },
+  formDebtInfo: { debtInfo: [] },
   formSchedFunds: {
-    scheduledFundsInfo: [{ sfLogs: [] }],
+    scheduledFundsInfo: [],
   },
   formBillsInfo: {
-    billsInfo: [{ billsLogs: [] }],
+    billsInfo: [],
   },
   formDailyBudget: {
-    plannedBudgetInfo: [{ plannedLogs: [] }],
+    plannedBudgetInfo: [],
   },
   formDailyLogs: {
     dailyLogs: {
-      spent: [{ description: '', amount: 0, date: '' }],
-      received: [{ description: '', amount: 0, date: '' }],
+      spent: [],
+      received: [],
     },
   },
   formSubmitted: false,

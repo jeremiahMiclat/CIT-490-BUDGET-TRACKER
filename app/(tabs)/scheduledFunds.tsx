@@ -69,18 +69,14 @@ export default function SFScreen() {
     return (
       <View style={styles.logItemContainer}>
         <Text style={[styles.logItemText, styles.text]}>
-          {item.item.notes != undefined
-            ? JSON.stringify(item.item.notes)
-            : 'not set'}
+          {item.item.notes != undefined ? item.item.notes : 'No notes'}
         </Text>
         <Text style={[styles.logItemText, styles.text]}>
-          {item.item.amount != undefined
-            ? JSON.stringify(item.item.amount)
-            : 'not set'}
+          {item.item.amount != undefined ? item.item.amount : '0'}
         </Text>
         <Text style={[styles.logItemText, styles.text]}>
           {item.item.date != undefined
-            ? JSON.stringify(item.item.date)
+            ? dayjs(item.item.date).format('MMMM DD, YYYY')
             : 'not set'}
         </Text>
         <Pressable

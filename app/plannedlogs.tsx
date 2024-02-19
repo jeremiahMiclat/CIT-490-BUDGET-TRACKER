@@ -44,7 +44,14 @@ export default function AddPlannedLogsScreen() {
     getValues,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      notes: '',
+      amount: '',
+      date: '',
+      dateAdded: '',
+    },
+  });
   const [showDTPicker, setShowDTPicker] = useState(false);
   const [date, setDate] = useState(dayjs());
   const dataIdentifier = useSelector(
@@ -65,6 +72,12 @@ export default function AddPlannedLogsScreen() {
   const [appDataValue, setAppDataValue] = useState(appData.value as any);
 
   const onSubmit = (data: any) => {
+    if (data.amount == '') {
+      data.amount = '0';
+    }
+    if (data.notes == '') {
+      data.notes = 'No notes';
+    }
     const plannedBudgetInfoItem = (itemOnView as any).plannedBudgetInfo;
     const plannedInfoIndex = (dataOnEdit as any).index;
     const plannedInfoItemOnEdit = (dataOnEdit as any).plannedBudgetInfo;

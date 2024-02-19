@@ -69,18 +69,14 @@ export default function DebtsScreen() {
     return (
       <View style={styles.logItemContainer}>
         <Text style={[styles.logItemText, styles.text]}>
-          {item.item.notes != undefined
-            ? JSON.stringify(item.item.notes)
-            : 'not set'}
+          {item.item.notes != undefined ? item.item.notes : 'not set'}
         </Text>
         <Text style={[styles.logItemText, styles.text]}>
-          {item.item.amountPaid != undefined
-            ? JSON.stringify(item.item.amountPaid)
-            : 'not set'}
+          {item.item.amountPaid != undefined ? item.item.amountPaid : 'not set'}
         </Text>
         <Text style={[styles.logItemText, styles.text]}>
           {item.item.date != undefined
-            ? JSON.stringify(item.item.date)
+            ? dayjs(item.item.date).format('MMMM DD, YYYY')
             : 'not set'}
         </Text>
         <Pressable

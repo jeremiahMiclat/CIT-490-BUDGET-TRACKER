@@ -44,7 +44,14 @@ export default function AddDebtLogScreen() {
     getValues,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      notes: '',
+      amountPaid: '',
+      date: '',
+      dateAdded: '',
+    },
+  });
   const [showDTPicker, setShowDTPicker] = useState(false);
   const [date, setDate] = useState(dayjs());
   const dataIdentifier = useSelector(
@@ -135,6 +142,12 @@ export default function AddDebtLogScreen() {
   // }, [appDataValue]);
 
   const onSubmit = (data: any) => {
+    if (data.amountPaid == '') {
+      data.amountPaid = '0';
+    }
+    if (data.notes == '') {
+      data.notes = 'No notes';
+    }
     const debtInfoItems = (itemOnView as any).debtInfo;
     const debtInfoIndex = (dataOnEdit as any).index;
     const debtInfoItemOnEdit = (dataOnEdit as any).debtInfo;
