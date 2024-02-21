@@ -23,6 +23,7 @@ const initialState = {
     isLoggedIn: false,
     id: null,
     existingData: [{ fieldName: 'no data' }],
+    userProfile: {},
   },
   formData: { data: {}, debtInfo: {} },
   formDebtInfo: { debtInfo: [] },
@@ -140,7 +141,13 @@ function RootLayoutNav() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="signin" options={{ presentation: 'modal' }} />
+        <Stack.Screen
+          name="signin"
+          options={{
+            presentation: 'modal',
+            title: 'Account and Cloud Storage',
+          }}
+        />
         <Stack.Screen name="websignin" options={{ presentation: 'modal' }} />
         <Stack.Screen
           name="adddebtinfo"

@@ -1,8 +1,11 @@
-import { StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from '@react-native-google-signin/google-signin';
 
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-native';
@@ -13,7 +16,7 @@ import { RootState, counterSlice } from './_layout';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs from 'dayjs';
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 
 GoogleSignin.configure({
   webClientId:
@@ -45,8 +48,8 @@ export default function SignInScreen() {
   const userData = useSelector((state: RootState) => state.user);
   const localData = useSelector((state: RootState) => state.data);
   const dispatch = useDispatch();
-  let cloudUserData;
-
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   // when screen is loaded
   const [dataFetched, setDataFetched] = useState(false);
 
@@ -61,6 +64,7 @@ export default function SignInScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
+      setLoading(true);
       const fetchInitialData = async () => {
         try {
           if (userData && userData.id && !dataFetched) {
@@ -77,42 +81,50 @@ export default function SignInScreen() {
               isLoggedIn: true,
               id: userData.id,
               existingData: transformedData as [],
+              userProfile: userData.userProfile,
             };
             dispatch(counterSlice.actions.updateUser(newUserData));
             setDataFetched(true); // Mark data as fetched
           }
         } catch (error) {
           // Handle error
+        } finally {
+          setLoading(false);
         }
       };
 
       fetchInitialData();
     }, [userData, dataFetched])
   );
+
   async function handleSignIn() {
     if (userData.isLoggedIn) {
       console.log('User already logged');
+      setLoading(false);
+      return;
     }
-    if (userData.isLoggedIn === false) {
-      //sign in user
+
+    setLoading(true);
+
+    try {
+      // Sign in user
       const res = await onGoogleButtonPress();
       let fieldData = localData as any;
       const fieldName = fieldData.identifier;
 
-      // save user info starts
+      // Save user info
       if (res && res.user && res.user.uid) {
         const uid = res.user.uid;
+        const userProfile = res.additionalUserInfo?.profile;
         const userData = {
           isLoggedIn: true,
           id: uid,
+          userProfile: userProfile,
         };
         dispatch(counterSlice.actions.updateUser(userData));
         await AsyncStorage.setItem('user', JSON.stringify(userData));
 
-        // end of saving user info
-
-        // upload existing to cloud
-
+        // Upload existing data to cloud
         const upload = async () => {
           const todate = dayjs();
           const newFieldName =
@@ -120,29 +132,37 @@ export default function SignInScreen() {
             ' - (' +
             todate.format('MMMM D, YYYY h:mm:ss A') +
             ')';
-          firestore()
+          await firestore()
             .collection('Users')
             .doc(uid)
-            .set({ [newFieldName]: JSON.stringify(fieldData) }, { merge: true })
-            .then(() => {
-              console.log('Data uploaded!');
-            });
+            .set(
+              { [newFieldName]: JSON.stringify(fieldData) },
+              { merge: true }
+            );
+          console.log('Data uploaded!');
         };
+
         const isEmpty =
           !localData.value || Object.keys(localData.value).length === 0;
         if (localData && !isEmpty) {
-          upload();
+          await upload();
         } else {
           console.log('no data to upload');
         }
       }
+
       setDataFetched(false);
       return res;
+    } catch (error) {
+      console.error('Error signing in:', error);
+    } finally {
+      setLoading(false);
     }
   }
 
   const handleSignOut = async () => {
     if (userData.isLoggedIn) {
+      setLoading(true);
       try {
         const newUserData = {
           isLoggedIn: false,
@@ -159,24 +179,35 @@ export default function SignInScreen() {
         await GoogleSignin.signOut();
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     }
   };
 
   const setLocalData = async (item: any) => {
-    const newValue = JSON.parse(item.value);
+    setLoading(true);
     try {
+      const newValue = JSON.parse(item.value);
       const newData = {
         identifier:
           'From cloud (' + dayjs().format('MMMM D, YYYY h:mm:ss A') + ')',
         value: newValue.value,
       };
-      // const parsedVal = JSON.parse(item);
-      console.log(newData);
+      const startTime = Date.now();
+
       dispatch(counterSlice.actions.updateData(newData));
-      // await AsyncStorage.setItem('btData', item.value);
+
+      const timeElapsed = Date.now() - startTime;
+
+      if (timeElapsed < 1000) {
+        await new Promise(resolve => setTimeout(resolve, 1000 - timeElapsed));
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
+      router.replace('/');
     }
   };
 
@@ -204,12 +235,18 @@ export default function SignInScreen() {
   };
 
   return (
-    <SignInComponent
-      signIn={handleSignIn}
-      signOut={handleSignOut}
-      setLocal={setLocalData}
-      deleteOnCloud={deleteCloudData}
-    />
+    <>
+      {loading ? (
+        <ActivityIndicator style={{ flex: 1, backgroundColor: '#8DA750' }} />
+      ) : (
+        <SignInComponent
+          signIn={handleSignIn}
+          signOut={handleSignOut}
+          setLocal={setLocalData}
+          deleteOnCloud={deleteCloudData}
+        />
+      )}
+    </>
   );
 }
 
