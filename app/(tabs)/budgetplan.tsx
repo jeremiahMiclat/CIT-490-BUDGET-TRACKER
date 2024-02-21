@@ -150,7 +150,7 @@ export default function BudgetPlanScreen() {
     overAllBudget - totalSpent - totalBills - totalDebts - totalPlannedBudget;
 
   // remaining without sched funds
-  const budgetWOSf = overAllBudget - totalSf + totalReceivedSf;
+  const budgetWOSf = budgetWSf - totalSf;
 
   const decimalPlaces = 2;
   const multiplier = Math.pow(10, decimalPlaces);
@@ -160,7 +160,11 @@ export default function BudgetPlanScreen() {
   // cash on hand
   const cash =
     Math.round(
-      (Number(initialBudget) + totalReceived + totalReceivedSf - totalSpent) *
+      (Number(initialBudget) +
+        totalReceived +
+        totalReceivedSf -
+        totalSpent -
+        totalPlannedBudget) *
         multiplier
     ) / multiplier;
 
