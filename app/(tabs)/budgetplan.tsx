@@ -163,6 +163,7 @@ export default function BudgetPlanScreen() {
       (Number(initialBudget) +
         totalReceived +
         totalReceivedSf -
+        totalDebts -
         totalSpent -
         totalPlannedBudget) *
         multiplier
