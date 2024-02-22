@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#DCEDC8',
     padding: 10,
     margin: 10,
+    flex: 1,
   },
   flatListContainerHeader: {
     color: '#003300',
